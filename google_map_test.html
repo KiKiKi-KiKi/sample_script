@@ -1,0 +1,46 @@
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Google Map Test</title>
+<style type="text/css">
+#map {
+width: 750px;
+height: 500px;
+}
+</style>
+</head>
+<body>
+<h1>Google Map Example</h1>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script>
+!function() {
+  google.maps.event.addDomListener(window, 'load', init);
+  var myMarkers = [
+    {position: new google.maps.LatLng(35.681382, 139.766084), title: 'Tokyo Station'},
+    {position: new google.maps.LatLng(35.690921, 139.700258), title: 'Shinjuku Station'}
+    ],
+    myStyle = [{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]}];
+  /* int */
+  function init() {
+    var mapOptions = {
+      zoom: 11,
+      center: new google.maps.LatLng(35.69106, 139.733989),
+      styles: myStyle
+    };
+    var mapElement = document.getElementById('map');
+    var map = new google.maps.Map(mapElement, mapOptions);
+    for(var i=0,l=myMarkers.length; i<l; i+=1){
+      var marker = new google.maps.Marker({
+          position: myMarkers[i].position,
+          map: map,
+          title: myMarkers[i].title
+        });
+    }
+  }
+}();
+</script>
+</body>
+</html>
