@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+</head>
+<body>
+<button>asynchronous</button>
+<div id="result"></div>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+$(function(){
+  var box;
+  $('button').on('click', function(evt) {
+    var url = './widthTest.html'; //'asynchronous.html'
+    $.ajax({
+      url: url,
+      type: 'get',
+      dataType: 'html'
+    })
+    .done(function(res) {
+      console.log('DONE', typeof(res));
+      box = res;
+    })
+    .fail(function(jqXHR, statusText, errorThrown) {
+      console.log('FAIL', jqXHR, statusText, errorThrown);
+    });
+    return;
+  });
+});
+</script>
+</body>
+</html>
