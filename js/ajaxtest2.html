@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+var json;
+$(function(){
+  var jsonFilePath = 'data.json';//'jsonファイル';
+
+  // jsonデータを取得した後に行いたい処理はこの関数内に記述するか、関数内から呼び出す。
+  var afterInit = function(jsonData) {
+    console.log('afterInit', jsonData);
+    /**
+     * この関数内に処理の呼び出しを書けばjsonはグローバル変数に入ったものが利用できるが、
+     * あえてjsonをグローバル変数にする意味が無いと思います。
+     * この後大きな処理をゴリゴリ記述しないのであればinitに引数で渡してしまって使用するで問題ないかと思います。
+     * 上のスコープに置くとしても
+     * $(funtion(){
+     *   var json; ... ここで十分ではないでしょうか。
+     */
+
+     // 別ファイルにある何かの関数を呼び出す？
+     // fooFunc内で 変数 json を使用しても値が入っていることが保証できる
+     fooFunc();
+     // が、呼び出し時にで引数で渡してしまえばOKなのでグローバル置く必要は必ずしもない。
+     barFunc(jsonData);
+  };
+
+  var getJsonData = function(filePath) {
+    var defer = $.Deferred();
+    $.ajax({
+      type: 'GET',
+      url: filePath,
+      dataType: 'json',
+      cache: false
+    })
+    .done(defer.resolve)
+    .fail(defer.reject);
+    return defer.promise();
+  };
+
+  var init = function() {
+    getJsonData(jsonFilePath)
+    .done(function(res) {
+      console.log('jsonデータがAjaxで取得できた', res);
+      var sheetsEntry = res;//res.feed.entry;
+      //afterInit(json = sheetsEntry[0].gs$cell.$t);
+      afterInit(json = res.marker);
+    })
+    .fail(function(jqXHR, statusText, errorThrown) {
+      console.log('初期化失敗', jqXHR, statusText, errorThrown);
+      // jsonの取得に失敗した時の処理
+      setTimeout(function() {
+        // 1秒置いて再取得試みるとか？
+        init();
+      }, 1000);
+    });
+  };
+  init();
+});
+</script>
+</body>
+</html>
