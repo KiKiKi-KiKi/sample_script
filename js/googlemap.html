@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+</style>
+</head>
+<body>
+<div id="map-canvas"></div>
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+!function() {
+  var myMarkers = [
+    {
+      position: [60.142568, 24.989571],
+      title: 'Submarine Vesikko',
+      content: '潜水艦 べシッコがあるよ'
+    },
+    {
+      position: [60.145866, 24.989367],
+      title: 'Sotamuseon Maneesi',
+      content: '呉造兵廠で作られた120mm砲があるよ'
+    }
+  ];
+
+  function initialize() {
+    var myLatlng = new google.maps.LatLng(60.1500745,24.978537);
+
+    // Style
+    var myMapStyle = [{
+      featureType: 'all',
+      elementType: 'labels.icon',
+      stylers: [{visibility: 'off'}]
+    }, {
+      featureType: 'administrative',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#444444'}]
+    }, {
+      featureType:'landscape',
+      elementType: 'all',
+      stylers: [{color: '#f2f2f2'}]
+    }, {
+      featureType:'landscape',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#56D0BD'}]
+    }, {
+      featureType: 'poi',
+      elementType: 'all',
+      stylers: [{visibility: 'off'}]
+    }, {
+      featureType: 'road',
+      elementType: 'all',
+      stylers: [{saturation: -100},{lightness: 45}]
+    }, {
+      featureType: 'road.highway',
+      elementType: 'all',
+      stylers: [{visibility: 'simplified'}]
+    }, {
+      featureType: 'transit',
+      elementType: 'all',
+      stylers: [{visibility: 'off'}]
+    }, {
+      featureType: 'water',
+      elementType: 'all',
+      stylers: [{color: '#46bcec'},{visibility: 'on'}]
+    }];
+
+    // Map Options
+    var mapOptions = {
+      center: myLatlng,
+      zoom: 14,
+      styles: myMapStyle,
+      mapTypeControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: false
+    };
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'),
+        mapOptions);
+
+    var infowindow;
+    // show Information Window Event
+    var showInfoWindow = function(markerObj) {
+      if(infowindow) {
+        infowindow.close();
+      }
+      var content = '<strong>' + markerObj.getTitle() + '</strong><br />' + markerObj.content;
+      infowindow = new google.maps.InfoWindow({
+        content: content
+      });
+      return infowindow.open(map, markerObj);
+    };
+
+    // add markers
+    for(var i=0, l=myMarkers.length; i<l; i+=1) {
+      var markerData = myMarkers[i],
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng( markerData.position[0], markerData.position[1] ),
+            title: markerData.title,
+            content: markerData.content,
+            map: map
+          });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        showInfoWindow(this);
+      });
+    }
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+}();
+</script>
+</body>
+</html>
