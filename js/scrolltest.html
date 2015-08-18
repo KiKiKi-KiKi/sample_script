@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+#main {
+  height: 1200px;
+}
+textarea {
+  min-width: 320;
+  width: 100%;
+  min-height: 4em;
+}
+</style>
+</head>
+<body>
+  <textarea id="userAgent"></textarea>
+  <div id="main">
+  <a href="#" class="js-scrollBtn" data-tag="html">Scroll HTML</a> | <a href="#" class="js-scrollBtn" data-tag="body">Scroll BODY</a> | <a href="#" class="js-scrollBtn">Scroll Button</a>
+  </div>
+  <div id="end">END</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+!function($, w, d) {
+  var _ua = (function(){
+    return {
+      ltIE6:typeof window.addEventListener == "undefined" && typeof document.documentElement.style.maxHeight == "undefined",
+      ltIE7:typeof window.addEventListener == "undefined" && typeof document.querySelectorAll == "undefined",
+      ltIE8:typeof window.addEventListener == "undefined" && typeof document.getElementsByClassName == "undefined",
+      ltIE9:document.uniqueID && typeof window.matchMedia == "undefined",
+      gtIE10:document.uniqueID && window.matchMedia,
+      Trident:document.uniqueID,
+      Gecko:'MozAppearance' in document.documentElement.style,
+      Presto:window.opera,
+      Blink:window.chrome,
+      Webkit:typeof window.chrome == "undefined" && 'WebkitAppearance' in document.documentElement.style,
+      Touch:typeof document.ontouchstart != "undefined",
+      Mobile:(typeof window.orientation != "undefined") || (navigator.userAgent.indexOf("Windows Phone") != -1),
+      ltAd4_4:typeof window.orientation != "undefined" && typeof(EventSource) == "undefined",
+      Pointer:window.navigator.pointerEnabled,
+      MSPoniter:window.navigator.msPointerEnabled
+    };
+  })();
+  console.log(_ua);
+
+  var scrollTag = ( window.chrome || (typeof window.chrome == "undefined" && 'WebkitAppearance' in document.documentElement.style) )? 'body' : 'html';
+  alert( scrollTag );
+
+$(function() {
+  var tagPos = $('#end').offset().top + 'px';
+  $(d).on('click', '.js-scrollBtn', function(evt) {
+    var tag = $(this).data('tag');
+    if(!tag) {
+      tag = scrollTag;
+    }
+    $(tag).animate({
+      scrollTop: tagPos
+    }, 300, function() {
+      console.log(tag, ' scroll end');
+    });
+    return false;
+  });
+
+  var showArgent = function(str) {
+    var $t = $('#userAgent'),
+        val = $t.val();
+    $t.val( val + str + "\n" );
+  };
+
+  if(_ua.ltIE6){
+    showArgent('ご利用のブラウザはIE6以下ですね');
+  }
+  if(_ua.ltIE7){
+    showArgent('ご利用のブラウザはIE7以下ですね');
+  }
+  if(_ua.ltIE8){
+    showArgent('ご利用のブラウザはIE8以下ですね');
+  }
+  if(_ua.Trident && !_ua.ltIE8){
+    showArgent('ご利用のブラウザはIE9以上ですね');
+  }
+  if( (_ua.Trident && !_ua.ltIE9 ) || _ua.gtIE10){
+    //_ua.Trident && !_ua.ltIE9 と _ua.gtIE10 どちらでも同じ
+    showArgent('ご利用のブラウザはIE10以上ですね');
+  }
+  if(_ua.Blink && !_ua.Mobile){
+    showArgent('ご利用のブラウザはデスクトップ版Chrome/Operaですね');
+  }
+  if(_ua.Blink && _ua.Mobile){
+    showArgent('ご利用のブラウザはChrome for Androidですね');
+    if(_ua.ltAd4_4){
+      showArgent('、加えてご利用のAndroidのバージョンはAndroid4.4未満ですね');
+    }
+  }
+  if(_ua.Webkit && !_ua.Mobile){
+    showArgent('ご利用のブラウザはデスクトップ版Safariですね');
+  }
+  if(_ua.Webkit && _ua.Mobile){
+    showArgent('ご利用のブラウザはモバイルでWebkitベースですね');
+    if(_ua.ltAd4_4){
+      showArgent('、加えてご利用のAndroidのバージョンはAndroid4.4未満ですね');
+    }
+  }
+  if(_ua.Gecko && !_ua.Mobile){
+    showArgent('ご利用のブラウザはデスクトップ版Firefoxですね');
+  }
+  if(_ua.Gecko && _ua.Mobile){
+    showArgent('ご利用のブラウザはモバイル版Firefoxですね');
+  }
+  if(_ua.Presto){
+    showArgent('ご利用のブラウザは旧Presto OperaまたはOpera Miniですね');
+  }
+  if(_ua.Touch){
+    showArgent('タッチデバイス');
+  }
+});
+}(jQuery, window, document);
+</script>
+</body>
+</html>
