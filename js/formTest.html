@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<input type="text" name="a" value="a">
+<input type="text" name="b" value="b">
+<input type="button" name="c" value="button">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+$(function() {
+  var data = {};
+  !function() {
+    $('input[type="text"]').each(function(i, elm) {
+      var $input = $(elm),
+          val = $input.val(), // inputタグのvalue
+          inputName = $input.attr('name'); // inputタグのname属性
+      data[inputName] = val;
+    });
+  }();
+  console.log(data);
+});
+
+$(function() {
+  var getInputTextValues = function() {
+    var data = {};
+    $('input[type="text"]').each(function(i, elm) {
+      var $input = $(elm),
+          val = $input.val(), // inputタグのvalue
+          inputName = $input.attr('name'); // inputタグのname属性
+      console.log(inputName, val);
+      data[inputName] = val;
+    });
+    return data;
+  };
+  $('input[type="button"]').on('click', function(evt) {
+    var data = getInputTextValues();
+    // 取り急ぎフォームを送らないようにするのであれば下記を追加してください。
+    // evt.preventDefault(); evt.stopPropagation(); を使う方法もあります。
+    // 興味があれば調べてみてください。
+    return false;
+  });
+});
+</script>
+</body>
+</html>
