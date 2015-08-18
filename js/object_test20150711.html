@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+#js-resizeImage {
+  position: fixed;
+  top: 0;
+}
+
+</style>
+</head>
+<body>
+<img src="https://pbs.twimg.com/media/CMDnSeCUYAA4wnw.jpg" height="100%" id="js-translation-image">
+
+<div id="js-resizeImage">
+  <div class="js-resizeImage--scaleUp">
+    <i class="fa fa-plus fa-4x"></i>
+    <div class="p-hover-balloon">拡大</div>
+  </div>
+  <div class="js-resizeImage--scaleDown">
+    <i class="fa fa-minus fa-4x"></i>
+    <div class="p-hover-balloon">縮小</div>
+  </div>
+  <div class="js-resizeImage--scaleInitial">
+    <i class="fa fa-refresh fa-4x"></i>
+    <div class="p-hover-balloon">初期化</div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function() {
+ //vendorprefixの判定
+ var venderPrefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'moz' : (/trident/i).test(navigator.userAgent) ? 'ms' : 'opera' in window ? 'O' : '';
+
+  var ResizeImageController = function(elm, options) {
+    var self = this, o;
+    self.$el = $(elm);
+    self.el = elm;
+    o = self.options = $.extend({}, ResizeImageController.DEFAULTS, options);
+    self.defaultRate = self.rate = o.rate;
+    self.step = o.step;
+    self.minScale = o.minScale;
+    self.maxScale = o.maxScale;
+    self.image = $( self.options.image ).get(0);
+    self.init();
+  };
+
+  // OPTIONS
+  ResizeImageController.DEFAULTS = {
+    rate: 1.0,
+    step: 0.5,
+    minScale: 0.5,
+    maxScale: 3.0,
+    image: 'img',
+    scaleUpBtn: '.scaleUp',
+    scaleDownBtn: '.scaleDown',
+    resetBtn: '.reset'
+  };
+
+  ResizeImageController.prototype.venderPrefix = venderPrefix;
+
+  ResizeImageController.prototype.init = function() {
+    var self = this, o = self.options;
+    self.$el.on('click', o.scaleUpBtn, function() {
+      self.scaleUp();
+    })
+    .on('click', o.scaleDownBtn, function() {
+      self.scaleDown();
+    })
+    .on('click', o.resetBtn, function() {
+      self.scaleInitial();
+    });
+  };
+
+  ResizeImageController.prototype.adoptScale = function(newRate) {
+    var self = this, o = self.options;
+    self.image.style[self.venderPrefix + 'Transform'] = 'scale(' + newRate + ')';
+    self.rate = newRate;
+  };
+
+  ResizeImageController.prototype.scaleInitial = function() {
+    this.adoptScale( this.defaultRate );
+  };
+
+  ResizeImageController.prototype.scaleUp = function() {
+    // rateが最大値以下なら拡大する
+    if(this.rate < 3) {
+      this.adoptScale( this.rate + this.step );
+    }
+  };
+
+  ResizeImageController.prototype.scaleDown = function() {
+    // rateが最小値以下なら縮小する
+    if(this.rate > 0.5) {
+      this.adoptScale( this.rate - this.step );
+    }
+  };
+
+  $.fn.resizeImageController = function(option) {
+    return this.each(function() {
+      var $this   = $(this),
+          options = typeof(option) == 'object' && option;
+      $this.data('my.resizeImageController', new ResizeImageController(this, options));
+    });
+  };
+
+  // Pluginを実行
+  $('#js-resizeImage').resizeImageController({
+    image: '#js-translation-image',
+    scaleUpBtn: '.js-resizeImage--scaleUp',
+    scaleDownBtn: '.js-resizeImage--scaleDown',
+    resetBtn: '.js-resizeImage--scaleInitial'
+  });
+});
+</script>
+</body>
+</html>
