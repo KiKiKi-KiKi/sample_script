@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+#js-resizeImage {
+  position: fixed;
+  top: 0;
+}
+</style>
+</head>
+<body>
+<img src="http://41.media.tumblr.com/5ad32ea9bcf0cd827afb5c967160e973/tumblr_n79u2ktZtb1tpgnejo1_1280.png" height="100%" id="js-translation-image">
+
+<div id="js-resizeImage">
+  <div class="js-resizeImage--scaleUp">
+    <i class="fa fa-plus fa-4x"></i>
+    <div class="p-hover-balloon">拡大</div>
+  </div>
+  <div class="js-resizeImage--scaleDown">
+    <i class="fa fa-minus fa-4x"></i>
+    <div class="p-hover-balloon">縮小</div>
+  </div>
+  <div class="js-resizeImage--scaleInitial">
+    <i class="fa fa-refresh fa-4x"></i>
+    <div class="p-hover-balloon">初期化</div>
+  </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+$(function(){
+  //vendorprefixの判定
+  var venderPrefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'moz' : (/trident/i).test(navigator.userAgent) ? 'ms' : 'opera' in window ? 'O' : '';
+
+  //ページの画像のリサイズの挙動
+  var ResizeImage = function(element) {
+    var self = this;
+    self.elem = $(element).get(0);
+    self.rate = 1.0;
+    self.step = 0.5;
+  };
+
+  ResizeImage.prototype.adoptScale = function(rate) {
+    console.log(this.rate, rate)
+    this.elem.style[venderPrefix + 'Transform'] = 'scale(' + rate + ')';
+    this.rate = rate;
+  };
+
+  ResizeImage.prototype.scaleInitial = function() {
+    this.adoptScale(1.0);
+  };
+
+  ResizeImage.prototype.scaleUp = function() {
+    if(this.rate < 3) {
+      this.adoptScale( this.rate + this.step );
+    }
+  };
+
+  ResizeImage.prototype.scaleDown = function() {
+    if(this.rate > 0.5) {
+      this.adoptScale( this.rate - this.step );
+    }
+  };
+
+  var resizeImages = new ResizeImage('#js-translation-image');
+
+  //イベントを要素にセット
+  $('#js-resizeImage').on('click', '.js-resizeImage--scaleUp', function() {
+    resizeImages.scaleUp();
+  })
+  .on('click', '.js-resizeImage--scaleDown', function() {
+    resizeImages.scaleDown();
+  })
+  .on('click', '.js-resizeImage--scaleInitial', function() {
+    resizeImages.scaleInitial();
+  });
+});
+</script>
+</body>
+</html>
