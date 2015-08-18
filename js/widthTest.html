@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+@media screen and (max-width: 999px) {
+  #pNav {
+    display: block !important;
+  }
+  #large-navi, #barNav {
+    display: none !important;
+  }
+}
+</style>
+</head>
+<body>
+<div id="main" style="height: 1000px;">
+<header style="position:fixed;">
+  <div id="pNav">#pNav</div>
+  <div id="large-navi">#large-navi</div>
+  <div id="barNav">#barNav</div>
+</header>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function() {
+  var $w = $(window),
+      minWidthFlg = false,
+      timer,
+      $navi1 = $('#pNav'),
+      $navi2 = $('#large-navi'),
+      $navi3 = $('#barNav').hide();
+  $w.on('scroll', function(evt) {
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      var sT = 0,
+          y = 100;
+      if( minWidthFlg === false ) {
+        sT = $w.scrollTop();
+        if(sT > y) {
+          $navi1.fadeOut();
+          $navi2.fadeOut();
+          $navi3.fadeIn();
+        } else {
+          $navi1.fadeIn();
+          $navi2.fadeIn();
+          $navi3.fadeOut();
+        }
+      }
+    }, 100);
+  })
+  .on('load resize', function(evt) {
+    var w = $w.width(),
+        x = 1000;
+    if( w >= x ) {
+      minWidthFlg = false;
+      /* ブラウザ幅が1000px以上になった時 既に100px以上のスクロールがある可能性があるのでスクロール時のイベントを実効してあげる  */
+      $w.trigger('scroll');
+    } else {
+      minWidthFlg = true;
+    }
+    console.log('minWidthFlg', minWidthFlg);
+  });
+});
+</script>
+</body>
+</html>
