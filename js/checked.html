@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div class="row" data-row-id="row-1">
+  <div class="silver">001</div>
+  <div class="name">001</div>
+  <div class="silver"><input type="checkbox" name="flag[]" value="1"></div>
+</div>
+<div class="row" data-row-id="row-2">
+  <div class="silver">002</div>
+  <div class="name">001</div>
+  <div class="silver"><input type="checkbox" name="flag[]" value="1"></div>
+</div>
+
+<button id="js-checkBtn">データをチェックするよ！</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function() {
+  var getkRowsData = function() {
+    var data = {};
+    $('input[name="flag[]"]:checked').each(function(i, elm) {
+      // this は inputタグです。 elm = this
+      // $(this).val() では チェックされているinputタグのvalueの値が取れます。
+      var $input = $(elm),
+          $row = $input.closest('.row'),
+          rowID,
+          rowData;
+      if($row.length) {
+        rowID = $row.data('row-id');
+        rowData = {
+          silver: $row.find('.silver').text(),
+          name: $row.find('.name').text(),
+          inputValue: $input.val(),
+          rowID: rowID,
+        };
+        data[rowID] = rowData;
+      }
+    });
+    return data;
+  };
+
+  $('#js-checkBtn').on('click', function(evt) {
+    var rowsData = getkRowsData();
+    console.log(rowsData);
+  });
+});
+</script>
+</body>
+</html>
