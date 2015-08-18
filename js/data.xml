@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <root>
+    <MarkerData>
+      <marker lat="35.681382" lng="139.766084">
+        <icon>atlas</icon>
+        <content><![CDATA[
+          <p>東京駅</p>
+        ]]></content>
+      </marker>
+          <marker lat="35.684801" lng="139.766086">
+        <icon>atlas</icon>
+        <content><![CDATA[
+          <p>大手町駅</p>
+        ]]></content>
+      </marker>
+          <marker lat="35.682413" lng="139.773919">
+        <icon>atlas</icon>
+        <content><![CDATA[
+          <p>日本橋駅</p>
+        ]]></content>
+      </marker>
+          <marker lat="35.67685" lng="139.7701">
+        <icon>atlas</icon>
+        <content><![CDATA[
+          <p>京橋駅</p>
+        ]]></content>
+      </marker>
+    </MarkerData>
+  </root>

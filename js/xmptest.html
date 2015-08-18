@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+$(function(){
+  var FilePath = 'data.xml';
+
+  var getData = function(filePath) {
+    var defer = $.Deferred();
+    $.ajax({
+      type: 'GET',
+      url: filePath,
+      dataType: 'xml',
+      cache: false
+    })
+    .done(defer.resolve)
+    .fail(defer.reject);
+    return defer.promise();
+  };
+
+  var init = function() {
+    getData(FilePath)
+    .done(function(res) {
+      console.log('DONE', res);
+
+      var xml = res;
+      var markers = xml.documentElement.getElementsByTagName("marker");
+      console.log(markers);
+      for (var i = 0, l = markers.length; i < l; i+=1) {
+        if (markerType == markers[i].getAttribute("type")) {
+        }
+      }
+
+    })
+    .fail(function(jqXHR, statusText, errorThrown) {
+      console.log('FAIL', jqXHR, statusText, errorThrown);
+    });
+  };
+  init();
+});
+</script>
+</body>
+</html>
