@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<input type="text" id="txt" value="なにか書いて">
+<script>
+// trimメソッドがなければ追加する
+if(!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g,'');
+  };
+}
+
+var inputText = document.getElementById('txt');
+var txt = inputText.value;
+window.onload = function() {
+  var body_txt = localStorage.getItem('txt');
+  if (body_txt){
+    inputText.value = body_txt;
+  }
+  inputText.onchange = function() {
+    var inputVal = inputText.value.trim();
+    // trimして値があるときだけ保存
+    if(inputVal) {
+      localStorage.setItem('txt', inputVal);
+    }
+  };
+};
+</script>
+</body>
+</html>
