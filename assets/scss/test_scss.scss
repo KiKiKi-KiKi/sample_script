@@ -1,0 +1,14 @@
+$bglist: rgba(232,110,164,.5), rgba(94,169,221,.5), rgba(120,193,91,.5);
+
+.hoge {
+  width: 100px;
+  height: 100px;
+
+  @each $color in $bglist {
+    $index: index($bglist, $color);
+    &:nth-child(#{$index}) {
+      background-color: #{$color};
+      // background-color: rgba( nth($color, 1), nth($color, 2), nth($color, 3), nth($color, 4) );
+    }
+  }
+}
