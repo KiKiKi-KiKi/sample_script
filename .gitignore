@@ -1,6 +1,4 @@
 .DS_Store
 node_modules/*
 .sass-cache/*
-assets/css/*
-assets/js/*
 !.gitkeep
