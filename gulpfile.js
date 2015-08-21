@@ -2,14 +2,27 @@ var gulp = require("gulp"),
     sass = require("gulp-sass"),
     //compass = require('gulp-compass'),
     autoprefixer = require("gulp-autoprefixer"),
-    plumber = require("gulp-plumber");
+    plumber = require("gulp-plumber"),
+    concat = require("gulp-concat"),
+    minifyCss = require("gulp-minify-css");
 
 gulp.task("compass", function() {
-  gulp.src('asset/scss/*.scss')
+  return gulp.src('assets/scss/*.scss')
     .pipe(plumber())
     .pipe(sass())
     .pipe(autoprefixer())
-    .pipe(gulp.dest("asset/css"));
+    .pipe(gulp.dest("assets/css"));
+});
+
+gulp.task("cssmin", function(){
+  return gulp.src([
+      'assets/css/html5reset.css',
+      'assets/css/slick.css',
+      'assets/css/font-awesome.css'
+    ])
+    .pipe(concat('all.css'))
+    .pipe(minifyCss())
+    .pipe(gulp.dest('assets/css/'));
 });
 
 gulp.task('css', ['compass']);
