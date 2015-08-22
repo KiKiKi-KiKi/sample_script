@@ -1,0 +1,19 @@
+{
+  "name": "sample_script",
+  "version": "0.0.0",
+  "homepage": "https://github.com/chaika-design/sample_script",
+  "authors": [
+    "Chaika <chaika.design@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

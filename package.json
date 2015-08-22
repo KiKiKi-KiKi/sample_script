@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/chaika-design/sample_script#readme",
   "devDependencies": {
+    "bootstrap": "^3.3.5",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-compass": "^2.1.0",
