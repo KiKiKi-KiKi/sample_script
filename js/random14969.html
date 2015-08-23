@@ -5,8 +5,12 @@
 </head>
 <body>
 <script>
+/*
 var menu1 = ["ジュースA","チョコA","アメA"];
 var menu2 = ["ジュースB","チョコB","アメB"];
+*/
+var menu1 = ["阿武隈", "川内", "神通", "那珂"];
+var menu2 = ["暁", "響", "雷", "電"];
 
 // 配列の長さを同じにする
 var adjustLength = function(arg1, arg2) {
@@ -81,45 +85,52 @@ var getRandomPattern = function(n) {
   for(i=0, l=ptn1.length; i<l; i+=1) {
     var m1 = menu1[ ptn1[i] ],
         m2 = menu2[ ptn2[i] ];
-    console.log(m1 + 'と' + m2);
+    console.log(m1 + 'と' + m2 +'のペアで訓練！');
   }
 }();
 
 console.log('------C');
+/*
+var argA = ["阿武隈", "暁", "響", "雷", "電"];
+var argB = ["阿武隈", "暁", "響", "初霜"];
+*/
+var argA = ["りんご", "ばなな", "きうい", "みかん"];
+var argB = ["りんご", "ばなな", "きうい"];
 
-var menuA = ["ジュース","チョコ","アメ"];
-var menuB = ["チョコ","ジュース","アメ","バナナ"];
-
-var generatePatterns = function(arg, tmp, post, n) {
-  if(n > 0) {
-    var next, rest;
-    for(var i=0, l=post.length; i<l; i+=1) {
-      rest = post.slice(0);
-      next = rest.splice(i, 1);
-      generatePatterns(arg, tmp.concat(next), rest, n-1);
+var generatePatterns = function(arg) {
+  var patterns = [];
+  var sortArg = function(allPtns, ptnArg, post, n) {
+    if(n > 0) {
+      var next, rest;
+      for(var i=0, l=post.length; i<l; i+=1) {
+        rest = post.slice(0);
+        next = rest.splice(i, 1);
+        sortArg(allPtns, ptnArg.concat(next), rest, n-1);
+      }
+    } else {
+      console.log(ptnArg);
+      allPtns[ allPtns.length ] = ptnArg;
     }
-  } else {
-    console.log(tmp);
-    arg[ arg.length ] = tmp;
-  }
-}
+  };
+  sortArg(patterns, [], arg, arg.length);
+  return patterns;
+};
 !function() {
   var i = 0,
       l = 0,
-      allPatternsA = [],
-      allPatternsB = [],
+      allPatternsA,
+      allPatternsB,
       randA,
       randB,
       ptnA,
       ptnB,
       isSame = true;
 
-  adjustLength(menuA, menuB);
-  console.log('▼ menuAの取り出し方の全パターン ▼');
-  generatePatterns(allPatternsA, [], menuA, menuA.length);
-  console.log('▼ menuBの取り出し方の全パターン ▼');
-  generatePatterns(allPatternsB, [], menuB, menuB.length);
-
+  adjustLength(argA, argB);
+  console.log('▼ argAの取り出し方の全パターン ▼');
+  allPatternsA = generatePatterns(argA);
+  console.log('▼ argBの取り出し方の全パターン ▼');
+  allPatternsB = generatePatterns(argB);
   randA = Math.floor( Math.random() * allPatternsA.length );
   ptnA = allPatternsA[randA];
   while(isSame) {
