@@ -8,11 +8,11 @@ Pure Drawer is a 100% css solution for off-canvas drawers.
 
 https://github.com/mac81/pure-drawer/tree/master/src
 
-## Demo 
+## Demo
 
 http://mac81.github.io/pure-drawer/
 
-## Documentation 
+## Documentation
 
 http://mac81.github.io/pure-drawer/documentation
 
@@ -53,11 +53,15 @@ http://mac81.github.io/pure-drawer/documentation
 
 - Fixed issue where window pusher jumped to top when drawer is active.
 - Rearranged fallback code
-- Adjustments to scss settings 
+- Adjustments to scss settings
 
 **0.6** :: *4th Aug 2014*
 
 - Added breakpoint support. Drawers can now have different width and height for small, medium and large screens.
 
+---
 
- 
+# https://teratail.com/questions/14543
+
+- [Pure Drawer](http://mac81.github.io/pure-drawer/)
+- [CSSだけで作るドロワーメニュー【Pure Drawer】使い方](http://glow-factory.com/blog_web/css/pure-drawer/)
