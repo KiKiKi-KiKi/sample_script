@@ -1,0 +1,9 @@
+.hoge {
+  width: 100px;
+  height: 100px; }
+  .hoge:nth-child(1) {
+    background-color: rgba(232, 110, 164, 0.5); }
+  .hoge:nth-child(2) {
+    background-color: rgba(94, 169, 221, 0.5); }
+  .hoge:nth-child(3) {
+    background-color: rgba(120, 193, 91, 0.5); }
