@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div id="stage">
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function(){
+  // 拡張したjQueryオブジェクトをDOMツリーに追加
+  $i = $('<i>').data('hello', function() {
+    console.log("hello from extend-add");
+  });
+  $('div#stage').append($i);
+  console.log( $i, $i.data() );
+
+  // DOMツリーから取得すると元のjQueryオブジェクトに戻ってしまう
+  $gotI = $('div#stage').find('i');
+  $gotI.each(function(i, elm) {
+    var $i = $(elm);
+    console.log($i, $i.data().hello);
+  });
+  //$gotI.data().hello(); // dataに格納して追加したfunctionはアクセス可能
+  //console.log( $gotI, $gotI.data('hello') );
+  //$gotI.data().hello();
+});
+
+$(function() {
+  var $i = $('<i>').extend({
+    hello: function() {
+      console.log("hello from extend-add");
+    }
+  });
+  console.log($i, $i.hello);
+  $('div#stage').append($i);
+
+  // DOMツリーから取得すると元のjQueryオブジェクトに戻ってしまう
+  var $gotI = $('div#stage').find('i');
+  console.log($gotI, $gotI.hello);
+  // $gotI.hello(); // undefined
+  $gotI[0].hello();
+});
+</script>
+</body>
+</html>
