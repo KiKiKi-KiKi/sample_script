@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<input type="button" value="start" onclick="start()">
+  <div id="result"></div>
+<script>
+/* 値を取得するだけ */
+function getNum() {
+  return localStorage.getItem('num');
+}
+/* 渡された値を保存するだけ */
+function save(num){
+  /* 必要であれば ここに num が数値ではなければ弾くバリデーションを入れてください。*/
+  localStorage.setItem('num', num);
+}
+
+function start() {
+  var num = getNum();
+  var newNum = parseInt(prompt("数字を入力"), 10);
+  /*
+   * 0 の時も比較できるようにnewNumの有無を (newNum || newNum === 0) で判定
+   * num-0 して数値化して比較する。
+   * なにも保存されてない時マイナスの数を入力されると +num だけだと 0 との比較になって保存されないので、
+   * newNumがあってnumがnullの場合は保存するようにする
+   */
+  console.log( newNum );
+  if((newNum || newNum === 0) && (newNum > num-0 || !num)) {
+    document.getElementById('result').innerHTML = newNum;
+    save(newNum);
+  }
+}
+
+window.onload = function(){
+  var body_num = getNum();
+  document.getElementById('result').innerHTML = body_num;
+};
+</script>
+</body>
