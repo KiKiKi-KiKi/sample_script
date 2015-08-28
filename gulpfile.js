@@ -1,15 +1,17 @@
-var gulp = require("gulp"),
-    plumber = require("gulp-plumber"),
-    concat = require("gulp-concat"),
-    bower = require('main-bower-files'),
-    rename = require('gulp-rename'),
+var gulp       = require("gulp"),
+    bower      = require('main-bower-files'),
     gulpFilter = require('gulp-filter'),
+    plumber    = require("gulp-plumber"),
+    concat     = require("gulp-concat"),
+    rename     = require('gulp-rename'),
+    // jade
+    jade = require("gulp-jade"),
     // CSS
     sass = require("gulp-sass"),
     //compass = require('gulp-compass'),
     autoprefixer = require("gulp-autoprefixer"),
-    minifyCss = require("gulp-minify-css"),
-    less = require('gulp-less'),
+    minifyCss    = require("gulp-minify-css"),
+    less         = require('gulp-less'),
     // JS
     uglify = require("gulp-uglify");
 
@@ -81,6 +83,16 @@ gulp.task("cssmin", function(){
 
 gulp.task('css', ['compass']);
 
+gulp.task('jade', function() {
+  return gulp.src(['jade/*.jade'])
+    .pipe(plumber())
+    .pipe(jade({
+      pretty: true
+    }))
+    .pipe(gulp.dest('html/'));
+});
+
 gulp.task('default', function() {
   gulp.watch(['asset/scss/*.scss'], ['css']);
+  gulp.watch(['jade/*.jade', 'jade/**/*.jade'], ['jade']);
 });
