@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<input type="text" placeholder="add ToDo" id="txt_todo"><br>
+<input type="button" value="add" onclick="add_todo();"><br>
+<div id="view_todo"></div>
+
+<script>
+var todo_no = 0;
+var todo_prefix = 'todo';
+function add_todo() {
+  var d = document;
+  var todo_elm;
+  var input_elm = d.getElementById('txt_todo');
+  var txt_todo = input_elm.value;
+  if(txt_todo !== "") {
+    todo_no += 1;
+    todo_elm = d.createElement('p');
+    todo_elm.id = todo_prefix + todo_no + '-' + new Date().getTime();;
+    todo_elm.innerHTML = txt_todo + ' <input type="button" value="del" onclick="del_todo(\'' + todo_elm.id + '\');">';
+    console.log('+ create TODO', todo_elm);
+    d.getElementById('view_todo').appendChild( todo_elm );
+    save();
+    // TODOを追加したらinputタグをクリアしてあげると使いやすくなりそうです
+    input_elm.value = '';
+  }
+}
+
+  function del_todo(todo_id) {
+    console.log('>>> delete TODO ID is', todo_id);
+    var d = document;
+    var del_elm = document.getElementById(todo_id);
+    document.getElementById('view_todo').removeChild(del_elm);
+    save();
+  }
+
+  function save(){
+    localStorage.setItem('txt_todo', document.getElementById('view_todo').innerHTML);
+  }
+
+  window.onload = function(){
+    var body_todo = localStorage.getItem('txt_todo');
+    document.getElementById('view_todo').innerHTML = body_todo;
+  };
+</script>
+</body>
+</html>
