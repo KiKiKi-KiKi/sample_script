@@ -87,34 +87,37 @@ gulp.task("cssmin", function(){
 gulp.task('css', ['compass']);
 
 gulp.task('jade', function(cb) {
+  var option = {
+    pretty: true
+  };
   // タスク振り分けの実験
   // refs. https://teratail.com/questions/6833
   console.log('this.seq:', this.seq);
   if( this.seq && this.seq.indexOf('release') >= 0 ) {
     // releaseから呼び出される時だけの処理
     console.log('>>> Rlease task');
+    option.pretty = false;
   }
   if( this.seq && this.seq.indexOf('build') >= 0 ) {
     // buildから呼び出される時だけの処理
     console.log('>>> Build task');
   }
+
   return gulp.src(['jade/*.jade'])
     .pipe(plumber())
-    .pipe(jade({
-      pretty: true
-    }))
+    .pipe(jade(option))
     .pipe(gulp.dest('html/'));
 });
 
 // タスク振り分けの実験
 // refs. https://teratail.com/questions/6833
 gulp.task('build', function(cb) {
-  // runSequence('jade', cb);
-  gulp.run(['jade', 'cssmin']);
+  runSequence('jade', cb);
+  // gulp.run(['jade', 'cssmin']);
 });
 gulp.task('release', function(cb) {
-  // runSequence('jade', cb);
-  gulp.run(['jade', 'cssmin']);
+  runSequence('jade', cb);
+  // gulp.run(['jade', 'cssmin']);
 });
 
 // WATCH
