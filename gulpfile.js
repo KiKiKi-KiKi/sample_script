@@ -1,9 +1,12 @@
-var gulp       = require("gulp"),
-    bower      = require('main-bower-files'),
-    gulpFilter = require('gulp-filter'),
-    plumber    = require("gulp-plumber"),
-    concat     = require("gulp-concat"),
-    rename     = require('gulp-rename'),
+var gulp        = require("gulp"),
+    bower       = require('main-bower-files'),
+    gulpFilter  = require('gulp-filter'),
+    plumber     = require("gulp-plumber"),
+    concat      = require("gulp-concat"),
+    rename      = require('gulp-rename'),
+    runSequence = require('run-sequence'),
+    // runSequence = require('gulp-run-sequence'),
+    clean       = require('gulp-clean'),
     // jade
     jade = require("gulp-jade"),
     // CSS
@@ -83,7 +86,18 @@ gulp.task("cssmin", function(){
 
 gulp.task('css', ['compass']);
 
-gulp.task('jade', function() {
+gulp.task('jade', function(cb) {
+  // タスク振り分けの実験
+  // refs. https://teratail.com/questions/6833
+  console.log('this.seq:', this.seq);
+  if( this.seq && this.seq.indexOf('release') >= 0 ) {
+    // releaseから呼び出される時だけの処理
+    console.log('>>> Rlease task');
+  }
+  if( this.seq && this.seq.indexOf('build') >= 0 ) {
+    // buildから呼び出される時だけの処理
+    console.log('>>> Build task');
+  }
   return gulp.src(['jade/*.jade'])
     .pipe(plumber())
     .pipe(jade({
@@ -92,6 +106,18 @@ gulp.task('jade', function() {
     .pipe(gulp.dest('html/'));
 });
 
+// タスク振り分けの実験
+// refs. https://teratail.com/questions/6833
+gulp.task('build', function(cb) {
+  // runSequence('jade', cb);
+  gulp.run(['jade', 'cssmin']);
+});
+gulp.task('release', function(cb) {
+  // runSequence('jade', cb);
+  gulp.run(['jade', 'cssmin']);
+});
+
+// WATCH
 gulp.task('default', function() {
   gulp.watch(['asset/scss/*.scss'], ['css']);
   gulp.watch(['jade/*.jade', 'jade/**/*.jade'], ['jade']);
