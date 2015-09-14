@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+// refs.https://teratail.com/questions/16181<br/>
+<a href="#" class="js-type1">(1)</a> | <a href="#" class="js-type2">(2)</a>
+<seciton id="hogeid1">
+<ul>
+  <li> <img src="/"> 文字列文字列文字列文字列文字列
+    <div class="hoge1">
+      <h4>･･････</h4>
+      <dl>･･････ </dl>
+      <p>･･････</p>
+      <div class="hoge2"> <a data-kz-track-on-click="････" href="･･････" class="hoge3">文字列文字列</a> </div>
+    </div>
+  </li>
+  <li> <img src="/"> 文字列文字列文字列文字列文字列
+    <div class="hoge1">
+      <h4>･･････</h4>
+      <dl>･･････ </dl>
+      <p>･･････</p>
+      <div class="hoge2"> <a data-kz-track-on-click="････" href="･･････" class="hoge3">文字列文字列</a> </div>
+    </div>
+  </li>
+  <li> <img src="/"> 文字列文字列文字列文字列文字列
+    <div class="hoge1">
+      <h4>･･････</h4>
+      <dl>･･････ </dl>
+      <p>･･････</p>
+      <div class="hoge2"> <a data-kz-track-on-click="････" href="･･････" class="hoge3">文字列文字列</a> </div>
+    </div>
+  </li>
+</ul>
+</seciton>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function() {
+  var changeType1 = function() {
+    console.log('type1');
+    jQuery('#hogeid1').find('li').each(function(i, elm) {
+      var $li = jQuery(elm),
+          $content = jQuery($li.html()),
+          $a = $li.find('a.hoge3').clone(),
+          $linkArea = $content.find('.hoge2');
+        $linkArea.html( '<span class="hoge3">' + $linkArea.text() + '</span>' );
+        $li.html( $a.html( $content ) );
+    });
+  };
+  var changeType2 = function() {
+    console.log('type2');
+    var $listArea = jQuery('#hogeid1');
+    $listArea.find('li').each(function(i, elm) {
+      var $li = jQuery(elm),
+          $a = $li.find('a.hoge3').clone(),
+          $img = $li.find('img');
+      $li.prepend( $a.html($img) );
+    });
+  };
+
+  $(document)
+  .on('click', '.js-type1', function(evt) {
+    changeType1();
+    return false;
+  })
+  .on('click', '.js-type2', function(evt) {
+    changeType2();
+    return false;
+  });
+});
+</script>
+</body>
+</html>
