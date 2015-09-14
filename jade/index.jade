@@ -9,3 +9,19 @@ html(lang="en")
       a(href='[permalink slug=\'test\']') link
     p
       a(href!="[permalink slug='test']") link
+    - link = '[permalink slug="test"]'
+    p
+      a(href= link) LINK
+    p
+      a(href='#{link}') LINK
+    - href = 'href=\'[permalink slug="test"]\''
+    p
+      a(href) LINK
+    p
+      a(#{href}) LINK
+
+    ul
+      li(ng-class="{active: thing.score \< 50}")
+        a(href='[permlink slug=\'url\']') LINK
+      li(ng-class!="{active: thing.score \< 50}")
+        a(href!='[permalink slug="test"]') LINK
