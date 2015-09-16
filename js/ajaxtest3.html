@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(function() {
+function test(){
+  $.when(
+    test.search.textSearch('test', 1, null, null, null)
+   ).done(function(data_a) {
+      console.log(data_a);
+      return data_a;
+   });
+
+   test.search.textSearch('test', 1, null, null, null)
+   .done(function(data_a) {
+      console.log(data_a);
+      return data_a;
+   });
+}
+
+test.search = (function() {
+  return {
+    // テキスト検索
+    textSearch: function(search, pageNo, treeNo, id, column) {
+      params = {
+        "search": search,
+        "pageNo": pageNo,
+        "treeNo":treeNo,
+        "id":id
+      };
+      var defer = $.Deferred();
+      $.ajax({
+        type: "POST",
+        url: 'data.json',
+        data: params,
+        dataType: 'json',
+        jsonpCallback: 'callback',
+      })
+      .done(function(json){
+        if(json.data && json.data.length !== 0) {
+          defer.resolve(json.data);
+        }
+        defer.resolve('hoge');
+      });
+      return defer.promise(this);
+    }
+  };
+})();
+test();
+});
+</script>
+</body>
+</html>
