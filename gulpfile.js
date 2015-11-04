@@ -1,4 +1,5 @@
 var gulp        = require("gulp"),
+    webserver   = require('gulp-webserver'),
     bower       = require('main-bower-files'),
     gulpFilter  = require('gulp-filter'),
     plumber     = require("gulp-plumber"),
@@ -16,7 +17,16 @@ var gulp        = require("gulp"),
     minifyCss    = require("gulp-minify-css"),
     less         = require('gulp-less'),
     // JS
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify"),
+    jshint = require("gulp-jshint");
+
+gulp.task('webserver', function() {
+  gulp.src('./html')
+    .pipe(webserver({
+      livereload: true,
+      port: 3000
+    }));
+});
 
 // bower CSS
 gulp.task('bowerCSS', function() {
@@ -120,8 +130,21 @@ gulp.task('release', function(cb) {
   // gulp.run(['jade', 'cssmin']);
 });
 
+// jsHint
+gulp.task('jsHint', function() {
+  var options = {
+    asi: false,
+    immed: false,
+    unused: true
+  };
+   return gulp.src( ['js/**/*.js'] )
+    .pipe( jshint(options) )
+    .pipe( jshint.reporter('jshint-stylish') );
+});
+
 // WATCH
-gulp.task('default', function() {
+gulp.task('default', ['webserver'], function() {
   gulp.watch(['asset/scss/*.scss'], ['css']);
   gulp.watch(['jade/*.jade', 'jade/**/*.jade'], ['jade']);
+  gulp.watch(['js/**/*.js'], ['jsHint']);
 });
