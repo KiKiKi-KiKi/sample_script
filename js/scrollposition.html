@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<style>
+#main {
+  padding: 300px 0 1000px;
+}
+.box {
+  height: 100px;
+  padding: 20px;
+  border: 1px solid #000;
+}
+#imageArea {
+  position: fixed;
+  top: 0;
+}
+#imageArea .img {
+  display: none;
+}
+#imageArea .active {
+  display: inline;
+}
+</style>
+</head>
+<body>
+<div id="imageArea">
+  <img class="img img-1" src="" alt="画像A">
+  <img class="img img-2" src="" alt="画像B">
+  <img class="img img-3" src="" alt="画像C">
+  <img class="img img-4" src="" alt="画像D">
+</div>
+<div id="main">
+<div id="box01" class="box">
+1 コンテンツ（文章や画像など）
+</div>
+
+<div id="box02" class="box">
+2 コンテンツ（文章や画像など）
+</div>
+
+<div id="box03" class="box">
+3 コンテンツ（文章や画像など）
+</div>
+
+<div id="box04" class="box">
+4 コンテンツ（文章や画像など）
+</div>
+</div>
+<script>
+$(function() {
+  // ボックスのポジションを取得する関数
+  var getBoxPositions = function() {
+    var boxNum = 4,
+        arg = [];
+    for(var i=0; i<boxNum; i+=1) {
+      var boxID,
+          parfix = "#box";
+      if(i < 10) {
+        boxID = parfix + "0" + (i + 1);
+      } else {
+        boxID = parfix + (i + 1);
+      }
+      arg[i] = $(boxID).offset().top;
+    }
+    return arg;
+  };
+
+  // スクロール位置からアクティブなエリアを調べてそのIndexを返す関数
+  // 該当エリアがない時は -1 を返す
+  var getActiveAreaIndex = function(st, boxPos) {
+    // margin ... boxの上部よりNpx上のスクロール位置になった切り替える
+    // このサンプルではboxの上部より100px上になった時点で切り替える想定です
+    var margin = 100,
+        n = boxPos.length;
+        activeAreaIndex = -1;
+    st += margin;
+    if(st < boxPos[0]) {
+      console.log('該当エリアなし');
+    } else {
+      while(n--) {
+        console.log(n);
+        if(st > boxPos[n]) {
+          break;
+        }
+      }
+      console.log("box" + (n+1) );
+      activeAreaIndex = n;
+    }
+    return activeAreaIndex;
+  };
+
+  // 画像を切り替える関数
+  var changeImageByBoxIndex = function(index) {
+    var $imageArea = $('#imageArea'),
+        imgPrefix = '.img-';
+        active = 'active';
+    // アクティブのものを非表示にする
+    $imageArea.find('.' + active).removeClass(active);
+    // 該当エリアがあるときだけ画像を表示させる
+    if(index > -1) {
+      return $imageArea.find(imgPrefix + (index + 1)).addClass(active);
+    }
+  };
+
+  !function(w, d) {
+    var $w = $(w),
+        timer,
+        boxPos = [];
+    $w.on('resize', function() {
+      // 画像リサイズ時に 各box のポジションを再取得
+      boxPos = getBoxPositions();
+      console.log(boxPos);
+    })
+    .on('scroll', function() {
+      clearTimeout(timer);
+      timer = setTimeout(function() {
+        var st = $w.scrollTop();
+        changeImageByBoxIndex( getActiveAreaIndex(st, boxPos) );
+      }, 100);
+    })
+    .trigger('resize');
+  }(window, document);
+});
+</script>
+</body>
