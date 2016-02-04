@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <p><a href="[permalink slug='test']">link</a></p>
+    <p><a href="[permalink slug='test']">link</a></p>
+    <p><a href="[permalink slug='test']">link</a></p>
+    <p><a href="[permalink slug=&quot;test&quot;]">LINK</a></p>
+    <p><a href="[permalink slug=&quot;test&quot;]">LINK</a></p>
+    <p><a href>LINK</a></p>
+    <p><a #{href}>LINK</a></p>
+    <ul>
+      <li ng-class="{active: thing.score &lt; 50}"><a href="[permlink slug='url']">LINK</a></li>
+      <li ng-class="{active: thing.score < 50}"><a href="[permalink slug="test"]">LINK</a></li>
+    </ul>
+  </body>
+</html>

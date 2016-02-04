@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+  refs. https://teratail.com/questions/26154
+  plugin http://kenwheeler.github.io/slick/
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+#slider {
+  padding: 30px 30px;
+  min-height: 100px;
+}
+.your-class {
+  margin: 0;
+  padding: 0;
+}
+.your-class .box {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 171px;
+  height: 100px;
+  min-height: 1px;
+  background: #FFF;
+  color: #666;
+}
+.blue {
+  background-color: #3498db;
+  color: #FFF;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="../library/slick-1.5.9/slick/slick.css"/>
+<!-- // Add the new slick-theme.css if you want the default styling -->
+<link rel="stylesheet" type="text/css" href="../library/slick-1.5.9/slick/slick-theme.css"/>
+</head>
+<body>
+
+<section class="blue">
+  <div id="slider">
+    <div class="your-class">
+      <div class="box">your content 1</div>
+      <div class="box">your content 2</div>
+      <div class="box">your content 3</div>
+  </div>
+  </div>
+</section>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="../library/slick-1.5.9/slick/slick.min.js"></script>
+<script>
+$(document).ready(function(){
+  var $slide = $('.your-class')
+    .on('afterChange', function(evt, slick, currentSlide) {
+    var slideNum = slick.slideCount - 1;
+    if(slideNum === currentSlide) {
+      // last slide
+      console.log('-- Pause --', this);
+      $(this).slick('slickPause');
+    }
+    //console.log(slick.slideCount);
+    console.log('afterChange', currentSlide);
+  }).slick({
+    // infinite: false,
+    slidesToShow: 1,
+    autoplay: true,
+    pauseOnHover:false,
+    autoplaySpeed: 2000,
+    arrows: false,
+    fade: true
+  });
+});
+</script>
+</body>
