@@ -137,7 +137,7 @@ gulp.task('jsHint', function() {
     immed: false,
     unused: true
   };
-   return gulp.src( ['js/**/*.js', 'assets/js/*.js', '!js/lib/*.js'] )
+   return gulp.src( ['js/**/*.js', 'assets/js/*.js', '!assets/js/_*.js','!js/lib/*.js'] )
     .pipe( jshint(options) )
     .pipe( jshint.reporter('jshint-stylish') );
 });
