@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<table id="table">
+  <tbody></tbody>
+</table>
+
+<script>
+$(function() {
+/*
+var data = ["2016/1/2","2016/2/2","2016/2/9","2016/2/10","2016/2/17","2016/3/10","2016/3/22"],
+    formatData = {},
+    html = '<tbody>';
+
+// {YEAR: {MONTH: [1, 2, 3, ...]}} という形にデータを整形する
+for(var i=0, l=data.length; i<l; i+=1) {
+  var date = data[i].split('/'),
+      year,
+      month,
+      day;
+  if(date.length === 3) {
+    year = date[0];
+    month = date[1];
+    day = date[2];
+
+    if(!formatData[year]) {
+      formatData[year] = {};
+    }
+    if(!formatData[year][month]) {
+      formatData[year][month] = [];
+    }
+    formatData[year][month].push(day);
+  }
+}
+console.log( formatData );
+
+// 整形したデータをループさせて出力するHTMLを作る
+Object.keys(formatData).forEach(function(year) {
+  var yearObj = formatData[year];
+  html += '<tr data-year="' + year + '">';
+  Object.keys(yearObj).forEach(function(month) {
+    var days = yearObj[month].join(',');
+    html += '<td><label>' + month + '月</label></td>'
+          + '<td><label>' + days + '</label></td>';
+  });
+  html += '</tr>';
+});
+html += '</tbody>';
+console.log(html);
+document.getElementById('table').innerHTML = html;
+*/
+
+var data = ["2016/1/2","2016/2/2","2016/2/9","2016/2/10","2016/2/17","2016/3/10","2016/3/22"];
+var formatData = (function(data) {
+  var newData = {};
+  for(var i=0, l=data.length; i<l; i+=1) {
+    var year, month, day, date = data[i].split('/');
+    if(date.length === 3) {
+      year  = date[0];
+      month = date[1];
+      day   = date[2];
+      if(!newData[year]) {
+        newData[year] = {};
+      }
+      if(!newData[year][month]) {
+        newData[year][month] = [];
+      }
+      newData[year][month].push(day);
+    }
+  }
+  return newData;
+})(data);
+
+console.log(formatData);
+
+var html = '';
+// 整形したデータをループさせて出力するHTMLを作る
+Object.keys(formatData).forEach(function(year) {
+  var yearObj = formatData[year];
+  html += '<tr data-year="' + year + '">';
+  Object.keys(yearObj).forEach(function(month) {
+    var days = yearObj[month].join(',');
+    html += '<td><label>' + month + '月</label></td>'
+          + '<td><label>' + days + '</label></td>';
+  });
+  html += '</tr>';
+});
+
+$('#table').find('tbody').html( html );
+
+});
+</script>
+</body>
