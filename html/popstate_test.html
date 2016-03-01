@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+</head>
+<body>
+<a id="push" href="#">pushstate count++</a>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+!function($, w, d) {
+$(function() {
+  /*
+  var w = window,
+      d = document;
+  */
+  if(w.history && w.history.pushState) {
+    $(d).on('click', '#push', function(evt) {
+      console.log('>> pushstate');
+      evt.preventDefault();
+      var q = w.location.search.substring(1),
+          res = {count: 0},
+          url;
+      q = q.split("&");
+      for(var i=0, l=q.length; i<l; i+=1) {
+        var parm = q[i].split('=');
+        res[parm[0]] = parm[1];
+      }
+      url = '?count=' + (res['count'] - 0 + 1);
+      // 第1引数で state を指定する
+      history.pushState('count', '', url);
+    });
+
+    $(w).on('popstate', function(evt) {
+      console.log('<< popstate', evt.originalEvent.state);
+      // state が存在してなければ何もしない
+      if(!evt.originalEvent.state) {
+        return;
+      }
+      history.go(0);
+      history.replaceState('back', '', w.location.pathname);
+    });
+  }
+});
+}(jQuery, window, document);
+</script>
+</body>
