@@ -1,0 +1,10 @@
+"use strict";
+// 約数の和を返す
+// n: Init
+module.exports = function(n) {
+  let c = Math.floor(n/2)+1, r = (n-0);
+  while(c--) {
+    if(n%c === 0) r += c;
+  }
+  return r;
+}
