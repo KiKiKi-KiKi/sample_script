@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<script type="text/javascript">
+// Default Mode
+!function() {
+function showThis() {
+  console.log(this); // => global Object (Window)
+}
+showThis();
+}();
+
+// Strict Mode
+!function() {
+'use strict';
+function showThis() {
+  console.log(this); // => undefined
+}
+showThis();
+}();
+</script>
+
+<script type="text/javascript">
+'use strict';
+console.log('global this = ', this); // Window
+
+// window. a = 'Hibiki'; と同じ意味
+var a = 'Hibiki';
+
+function say() {
+  var a = 'Abukuma';
+  console.log(a); // "Abukuma"
+  console.log(window.a); // "Hibiki"
+}
+
+say();
+
+var obj = {
+  name: 'サーバル',
+  say: function() {
+    // this` is obj
+    console.log(this, this.name + 'ちゃんすごーい！');
+  }
+};
+
+obj.say(); // Object, "サーバルちゃんすごーい！"
+</script>
+
+<script type="text/javascript">
+// 'use strict';
+function sayThisName() {
+  console.log(this, this.name);
+}
+
+var obj1 = {
+  name: 'かばん',
+  sayName: sayThisName
+};
+
+var obj2 = {
+  name: 'サーバル',
+  sayName: sayThisName
+};
+
+var name = 'ミライ';
+
+obj1.sayName(); // かばん
+obj2.sayName(); // サーバル
+
+// Strict Mode: Error `this` is undefined
+// Default Mode: `this` is Window => "ミライ"
+sayThisName();
+
+</script>
+
+<script type="text/javascript">
+'use strict';
+console.log("オブジェクト内の関数に記述した関数のthis");
+var obj = {
+  name: 'MyObjct',
+  fnc: function() {
+    var self = this;
+    console.log(this); // MyObject
+    // 関数宣言
+    function objFnc () {
+      console.log("関数宣言", this);
+      // default Mode =>  Global Object[window]
+      // Strict Mode => undefined
+    }
+    objFnc();
+    // 関数式
+    var myFnc = function(str) {
+      console.log('関数式' + str, this);
+      // default Mode =>  Global Object[window]
+      // Strict Mode => undefined
+    };
+    myFnc('');
+    // 即時関数
+    (function() {
+      console.log("即時関数", this);
+      // default Mode =>  Global Object[window]
+      // Strict Mode => undefined
+    })();
+
+    // set Timeout
+    window.setTimeout(function() {
+      console.log("setTimeout self", self);
+      // => MyObject
+      console.log("setTimeout", this);
+      // default Mode =>  Global Object[window]
+      // Strict Mode => Global Object[window]
+    }, 100);
+
+    myFnc.call(null, ' call null');
+    myFnc.call(this, ' call MyObj');
+  }
+};
+obj.fnc();
+</script>
+
+<script type="text/javascript">
+'use strict';
+var obj = {
+  name: "MyObject",
+  fnc: function() {
+    myApplyFnc(() => {
+      console.log(this, this.name);
+    });
+  }
+};
+
+var callback = function() {
+  console.log(this, this.name);
+};
+
+var myApplyFnc = function(fnc) {
+  if(typeof(fnc) === 'function') {
+    console.log('apply > ', fnc);
+    fnc.apply(window);
+  }
+};
+
+myApplyFnc(callback);
+myApplyFnc(callback.bind(obj));
+obj.fnc();
+</script>
+
+</body>
