@@ -60,3 +60,6 @@ obj1.func2 = function() {
   });
 };
 obj1.func2();
+
+var bindCallBack = callback.bind(obj1);
+console.log(bindCallBack);
