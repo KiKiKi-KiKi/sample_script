@@ -1,6 +1,7 @@
 "use strict";
 var input = '';
 var cartesian = require('./modules/cartesianProduct.js');
+
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 
@@ -17,8 +18,8 @@ process.stdin.on('end', function() {
     arr.push( Math.floor( Math.random()*seed + d[0] ) );
   }
 
-  console.log(arr);
+  // console.log(arr);
   var output = cartesian(arr);
-  console.log(output);
+  // console.log(output);
 });
 console.log("Input data & Close [ctr+D] >>>");

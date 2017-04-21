@@ -6,7 +6,8 @@ module.exports = function(arr) {
       a = arr.filter((x, i, self)=>self.indexOf(x)===i).sort((x,y)=>x-y),
       c = 0;
 
-  console.log(a);
+  // console.log(a);
+  console.time('run');
 
   function set_to_obj(e, n) {
     if(e in obj === false) {
@@ -25,6 +26,7 @@ module.exports = function(arr) {
     });
   }
 
+  console.timeEnd('run');
   console.log("処理数", c);
 
   return obj;
