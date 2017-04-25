@@ -21,6 +21,32 @@ function getArrayIndexValueDiff(oldArr, newArr) {
   return newArr.filter((v, i)=> oldArr[i] !== v);
 }
 
+function getArrayIndexValueDiffBoth(arr1, arr2) {
+  let _a1 = arr1,
+      _a2 = arr2,
+      _a2Len,
+      res = [[],[]],
+      reverse = false;
+  if(_a1.length < _a2.length) {
+    _a1 = arr2;
+    _a2 = arr1;
+    reverse = true;
+  }
+  _a2Len = _a2.length;
+  res[0] = _a1.filter((v, i)=> {
+    if(_a2[i] !== v) {
+      if( i < _a2Len ) {
+        res[1].push( _a2[i] );
+      }
+      return true;
+    }
+  });
+  if(reverse) {
+    res.reverse();
+  }
+  return res;
+}
+
 // Get Array Value Diff
 function getArrayDiff(arr1, arr2) {
   let arr = arr1.concat(arr2);
@@ -46,6 +72,10 @@ newArrays.forEach((v, i) => {
   console.log("------");
   console.log(">> Get Array Index & Value Diff");
   console.log( getArrayIndexValueDiff(arr1, arr2) );
+
+  console.log("------");
+  console.log(">> Get Array Index & Value Diff Both");
+  console.log( getArrayIndexValueDiffBoth(arr1, arr2) );
 
   console.log("------");
   console.log(">> Get Array Value Diff");
