@@ -13,8 +13,8 @@ echo $dt->weekOfMonth . "\n";
 */
 
 
-$weekCalenderData = getWeekCalender(false);
-// var_dump($weekCalenderData);
+$weekCalenderData = getWeekCalender(true, "2017-02-27");
+var_dump($weekCalenderData);
 $th = '';
 $td = '';
 foreach($weekCalenderData as $val) {
@@ -25,22 +25,20 @@ echo "<table><tr>${th}</tr><tr>{$td}</tr></table>";
 
 // ----------------------------------------------------------------
 
-// @param $startSun(Boolean)
+// @param $isStartSun(Boolean)
 //        true ... week start Sun
 //        false ... week start Mon
-function getWeekCalender($startSun = true, $date = "") {
-  $today = getToday( $date );
-  if($startSun) {
-    $startDate = getThisSunday( $today );
-  } else {
-    $startDate = getThisMonday( $today );
-  }
+function getWeekCalender($isStartSun = false, $date = "") {
+  $today = new Carbon( $date );
+  $todayDay = $today->day;
+  $startDate = getStartDay( $today->toDateString("Y-m-d"), $isStartSun );
   $startDay = $startDate->day;
-  // 月末日を取得
-  $limitDay = getLastDayOfMonth();
+  // 週の最終日を取得
   // note. コピーを作成しないと元のインスタンスの値が変更される
-  $lastDate = $startDate->copy()->addDay(7);
-  $lastDay = $lastDate->day;
+  $lastDay = $startDate->copy()->addDay(7)->day;
+
+  // 開始日のある月の最終日を取得
+  $limitDay = $startDate->copy()->endOfMonth()->day;
 
   // echo $startDate . ' - ' . $lastDate;
 
@@ -51,6 +49,7 @@ function getWeekCalender($startSun = true, $date = "") {
   $i = 0;
   while($i < 7) {
     $day = $startDay + $i;
+    // 月を跨いだ時
     if( $day > $limitDay ) {
       $day = $i - $offset;
       if($day === 1) {
@@ -60,15 +59,16 @@ function getWeekCalender($startSun = true, $date = "") {
         $month = 1;
       }
     }
-    if($startSun) {
-      $week = getWeekByNum($i);
+    if($isStartSun) {
+      $week = getWeekByIndex($i);
     } else {
-      $week = getWeekByNum($i+1);
+      $week = getWeekByIndex($i+1);
     }
     $weekArr[] = [
       'month' => $month,
       'day'   => $day,
       'week'  => $week,
+      'today' => $todayDay === $day? true : false,
     ];
     $i++;
   }
@@ -76,50 +76,27 @@ function getWeekCalender($startSun = true, $date = "") {
   return $weekArr;
 }
 
-// @param $date(String) ex "2017-05-01"
-function getToday($date = "") {
-  $dt = new Carbon( $date );
-  return $dt->toDateString("Y-m-d");
-}
+// 週の最初の日を取得
+// @param $today(:String) 'Y-m-d'
+function getStartDay($today, $isStartSun) {
+  $dt = new Carbon( $today );
 
-// 今週の月曜日を取得
-// @param $date(String) ex "2017-05-01"
-function getThisMonday($date = "") {
-  $dt = new Carbon( $date );
-
-  // 週の内何日目か Sun = 0
+  // $today が週の内何日目か (Sun = 0)
   $w = $dt->dayOfWeek;
-  if($w === 0) {
-    $w = 7;
+
+  // 月曜始まりのとき
+  if( !$isStartSun ) {
+    // 今日が日曜なら前の月曜
+    if($w === 0) {
+      $w = 7;
+    }
+    $w -= 1;
   }
 
-  $monday = $dt->subDay( $w-1 );
-
-  return $monday;
+  return $dt->subDay( $w );
 }
 
-// 今週の日曜日を取得
-// @param $date(String) ex "2017-05-01"
-function getThisSunday($date = "") {
-  $dt = new Carbon( $date );
-
-  // 週の内何日目か Sun = 0
-  $w = $dt->dayOfWeek;
-
-  $sunday = $dt->subDay( $w );
-
-  return $sunday;
-}
-
-// 今月の最終日を取得
-// @param $date(String) ex "2017-05-01"
-function getLastDayOfMonth($date ="") {
-  $dt = new Carbon( $date );
-  $lastDate = $dt->modify("last day of next month");
-  return $lastDate->day;
-}
-
-function getWeekByNum($i) {
+function getWeekByIndex($i) {
   $arr = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
   $len = count($arr);
   if($i >= $len) {
