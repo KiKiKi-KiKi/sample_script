@@ -22,7 +22,7 @@ gulp.task('stylus', function() {
       files = basePath + '/**/*.styl',
       destPath = destDir + '/assets/css';
 
-  return gulp.src( files )
+  return gulp.src( files, {base: basePath} )
     .pipe( plumber() )
     .pipe( stylus({
       import: ['nib'],
@@ -35,6 +35,10 @@ gulp.task('stylus', function() {
       cascade: true,
       grid: true
     }) )
+    .pipe( rename({
+      basename: 'page',
+      extname:  '.css'
+    }) )
     .pipe( gulp.dest( destPath ) );
 });
 
@@ -43,9 +47,9 @@ gulp.task('stylus:autoPrefix', function() {
   let files = devDir + '/stylus/**/*.styl',
       destPath = destDir + '/assets/css';
 
-  return gulp.src( files)
+  return gulp.src( files )
     .pipe( plumber() )
-    autoprefixer-stylus
+    // autoprefixer-stylus
     .pipe( stylus({
       import: ['nib'],
       use: [nib(), prefix({
@@ -54,6 +58,10 @@ gulp.task('stylus:autoPrefix', function() {
       })],
       compress: false,
       linenos:  false
+    }) )
+    .pipe( rename(function(path) {
+      console.log(path);
+      path.basename = 'page';
     }) )
     .pipe( gulp.dest( destPath ) );
 });
