@@ -51,9 +51,11 @@ console.log( String.raw`Hello\n${val}` ) // Hello\nJavascript
 // String.rawは最後が`\`になっている文字列だと最後が`\``とみなされエラーになる
 // console.log( String.raw`Hello\Java\\script\` ) // => Error
 
-console.log( String.raw`Hello\Java\\script` + '\\' ) // Hello\Java\\script\
-var v = '\\'
-console.log( String.raw`Hello\Java\\script${v}` ) // Hello\Java\\script\
+console.log( String.raw`Hello\nJava\Script` + "\\" ) // Hello\nJava\Script\
+var suffix = "\\"
+console.log( String.raw`Hello\nJava\Script${suffix}` ) // Hello\nJava\Script\
+
+console.log( "Hello\\nJava\\Script\\" ) // Hello\nJava\Script\
 
 // ${...}をそのまま出力
 val1 = "Hello${foo}World"
