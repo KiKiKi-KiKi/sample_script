@@ -84,3 +84,18 @@ console.log(str1 === str2, typeof(str1)) // true, 'object'
 // => TypeError: Cannot delete property
 // str1.push('!')
 // => TypeError: Cannot add property
+
+// 文字列中の改行
+str1 = "aaa\
+bbb\
+ccc"
+console.log(str1)
+str2 = `aaa\
+bbb\
+ccc`
+console.log(str2)
+// `\`無しで改行すると通常の改行になる
+str2 = `aaa
+bbb
+ccc`
+console.log(str2)
