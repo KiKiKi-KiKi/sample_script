@@ -48,3 +48,81 @@ let tel = '090-1111-2222'
 let tel_pattern = /^(0\d{2,4})\-(\d{1,4})\-(\d{2,5})$/
 let [, area, local, privated] = tel_pattern.exec(tel)
 console.log(area, local, privated)
+
+var a = 1, b = 2;
+[a, b] = [b, a];
+console.log(a, b); // 2, 1
+/*
+// 文章が終わってないと判断される場合エラーになる
+let a = 1, b = 2
+[a, b] = [b, a]
+// => ReferenceError: b is not defined
+
+let a = 1, b = 2
+{}
+[a, b] = [b, a]
+// => OK
+*/
+// 変数宣言だけならエラーにならない
+var a1, b1
+[a1, b1] = [1, 2]
+console.log(a1, b1) // 1, 2
+
+/*
+let aa = 1, bb = 2
+console.log(aa, bb)
+[aa, bb] = [bb, aa]
+// => TypeError: Cannot set property '2' of undefined
+*/
+var aa = 11, bb = 22
+console.log(aa, bb); // 11 22
+[aa, bb] = [bb, aa]
+console.log(aa, bb)  // 22 11
+
+var {cute, cool, sexy, ...other} = {
+  cute:   '星宮いちご',
+  cool:   '霧矢あおい',
+  pop:    '有栖川おとめ',
+  sexy:   '紫吹蘭',
+  legend: '神前美月'
+};
+console.log(cute);  // 星宮いちご
+console.log(cool);  // 霧矢あおい
+console.log(sexy);  // 紫吹蘭
+console.log(other); // { pop: '有栖川おとめ', legend: '神前美月' }
+
+var cute, cool
+({cute, cool} = { cute: '星宮いちご', cool: '音城セイラ' })
+console.log(cute, cool) // 星宮いちご, 音城セイラ
+
+/*
+var cute = '星宮いちご', cool = '霧矢あおい'
+({cute, cool} = { cute: '大空あかり', cool: '氷上スミレ' })
+// TypeError: "霧矢あおい" is not a function
+*/
+var cute = '星宮いちご', cool = '霧矢あおい';
+({cute, cool} = { cute: '大空あかり', cool: '氷上スミレ' })
+console.log(cute, cool)
+
+var cute = '星宮いちご', cool = '霧矢あおい', n = 5
+while(n--) { console.log(n) }
+({cute, cool} = { cute: '大空あかり', cool: '氷上スミレ' })
+console.log(cute, cool)
+
+var cute = '星宮いちご', cool = '霧矢あおい'
+;({cute, cool} = { cute: '大空あかり', cool: '氷上スミレ' })
+console.log(cute, cool)
+
+/*
+function myFunc() { console.log('OKOKOK-') }
+var sexy = '神前美月', pop = '夏樹みくる'
+myFunc()
+({sexy, pop} = { sexy: '風沢そら', pop: '冴草きい' })
+// TypeError: myFunc(...) is not a function
+console.log(sexy, pop)
+*/
+function myFunc() { console.log('OKOKOK-') }
+var sexy = '神前美月', pop = '夏樹みくる'
+myFunc();
+({sexy, pop} = { sexy: '風沢そら', pop: '冴草きい' })
+console.log(sexy, pop) // 風沢そら 冴草きい
