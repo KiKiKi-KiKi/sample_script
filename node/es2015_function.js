@@ -49,6 +49,10 @@ let hoge = () => {
 //let hoge = () => return {hoge: 'foo'}
 // => SyntaxError: Unexpected token return
 
+// ()で囲わないとundefined
+let foo = (param) => {cute: '星宮いちご'}
+console.log('foo', foo())  // undefined
+
 // thisの拘束
 // アロー関数内のthisは宣言された場所のスコープのthisに拘束される
 const Counter = function() {
@@ -82,3 +86,8 @@ Counter.prototype.stop = function() {
 let myCounter = new Counter()
 myCounter.start()
 setTimeout(() => {myCounter.stop()}, 500)
+
+// 即時関数
+;((name) => {
+  console.log(`My name is ${name}!`)
+})('ジョニー別府')
