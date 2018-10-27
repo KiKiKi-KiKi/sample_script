@@ -23,7 +23,104 @@ function hi(name) {
   })
 }
 
+// Promise.prototype.then(successCallback, failureCallback)
+function onSuccess(res) {
+  console.log('onSuccess', res)
+}
+
+function onReject(error) {
+  console.log('onReject', error)
+}
+
+hi('星宮いちご').then(onSuccess, onReject)
+// => onSuccess Hi, 星宮いちご!
+hi().then(onSuccess, onReject)
+// => onReject ERROR name is empty!
+
+hi('星宮いちご').then((res1) => {
+  console.log('onSuccess 1', res1)
+  hi('霧矢あおい').then((res2) => {
+    console.log('onSuccess 2', res2)
+    hi('紫吹蘭').then((res3)=> {
+      console.log('onSuccess 3', res3)
+    }, onReject)
+  }, onReject)
+}, onReject)
+// => onSuccess 1 Hi, 星宮いちご!
+// => onSuccess 2 Hi, 霧矢あおい!
+// => onSuccess 3 Hi, 紫吹蘭!
+
+// thenの第二引数にonReject callbackを渡していると、エラーがあっても次のthenに処理が流れる
+hi('神前美月').then(
+  (res1) => {
+    console.log('>> onSuccess B1', res1)
+    return hi()
+  },
+  (error) => console.log('>> onReject B1', error)
+)
+.then(
+  (res2) => {
+    console.log('onSuccess B2', res2)
+    return hi('藤堂ユリカ')
+  },
+  (error) => console.log('>> onReject B2', error))
+.then(
+  (res3) => {
+    console.log('>> onSuccess B3', res3)
+  },
+  (error) => console.log('>> onReject B3', error))
+// => >> onSuccess B1 Hi, 神前美月!
+// => >> onReject B2 ERROR name is empty!
+// => >> onSuccess B3 undefined
+
 // then(func success, func failure)
+hi('星宮いちご A').then((res1) => {
+  console.log('onSuccess 1', res1)
+  return hi('霧矢あおい A')
+})
+.then((res2) => {
+  console.log('onSuccess 2', res2)
+  return hi('紫吹蘭 A')
+})
+.then((res3) => {
+  console.log('onSuccess 3', res3)
+})
+.catch(onReject) // 共通のエラー処理
+
+// 途中でエラーがあると処理はcatchに流れる
+hi('神前美月').then((res1) => {
+  console.log('>>> onSuccess C1', res1)
+  return hi()
+})
+.then((res2) => {
+  console.log('>>> onSuccess C2', res2)
+  return hi('藤堂ユリカ')
+})
+.then((res3) => {
+  console.log('>>> onSuccess C3', res3)
+})
+.catch((error) => {
+  // 共通のエラー処理
+  console.log('Catch Error:', error)
+})
+// => onSuccess C1 Hi, 神前美月!
+// => Catch Error: ERROR name is empty!
+
+// onRject callbackがあるとcatchに処理は流れない
+hi().then(
+  (res) => {
+    console.log('++ onSuccess', res)
+  },
+  (error) => {
+    console.log('++ onReject Error:', error)
+  }
+)
+.catch((error) => {
+  // 共通のエラー処理
+  console.log('+++ Catch Error:', error)
+})
+// => ++ onReject Error: ERROR name is empty!
+
 hi('星宮いちご').then((res) => {
   console.log(res)
 })
