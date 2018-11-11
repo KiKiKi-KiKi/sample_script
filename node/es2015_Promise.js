@@ -294,7 +294,7 @@ setTimeout(() => {
   console.log('--- Promise.race ---')
   Promise.race([task1(), task3()])
     .then((res) => {
-      console.log('>>> Promise.race' ,res)
+      console.log('>>> Promise.race', res)
     })
     .catch((error) => {
       console.log('>>> Promise.race ERROR')
