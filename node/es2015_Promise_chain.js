@@ -57,19 +57,19 @@ console.log('---- then ')
 
 myFunc(1).then(
   (res1) => myFunc(0, res1),
-  (error) => console.log('Error 1')
+  (error) => console.log('Error 1', error)
 )
 .then(
   (res2) => myFunc(3, res2),
-  (error) => console.log('Error 2')
+  (error) => console.log('Error 2', error)
 )
 .then(
   (res3) => console.log('> Promaise Complete', res3),
-  (error) => console.log('Error 3')
+  (error) => console.log('Error 3', error)
 )
 .catch(onReject)
 // => (1 + 0) * 2 = 2
-// => Error 2
+// => Error 2 Error a is 0
 // => > Promaise Complete undefined
 
 }, 100)
@@ -176,3 +176,38 @@ myFunc2(0).then(
 setTimeout(() => {
 console.log('>>> Common Function')
 }, 400)
+
+setTimeout(() => {
+console.log('--- TEST ---')
+myFunc(0)
+.then(
+  (res1) => {
+    console.log('Success 1: res1 is ', res1)
+    return myFunc(res1)
+  },
+  (error1) => {
+    console.log('Error 1: default val 1')
+    return 1
+  }
+)
+.then(
+  (res2) => {
+    // 前のthenでPromise.rejectされないので、必ずココが実行される
+    console.log('Common callback: res2 is', res2)
+    return myFunc(res2)
+  },
+  (error2) => {
+    console.log('Error 2:', error2)
+    return Promise.reject('ERROR 2')
+  }
+)
+.then(
+  (res3) => {
+    console.log('Promise complete:', res3)
+  },
+  (error) => {
+    console.log('Error3', error)
+  }
+)
+
+}, 500);
