@@ -42,6 +42,7 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, {'Content-Type': getType(url)});
         res.end(data);
       } else {
+        // throw err するとコケる
         console.log(err, err.code);
         const statusCode = getErrorStatusCode(err);
         res.statusCode = statusCode
