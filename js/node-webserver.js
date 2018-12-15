@@ -16,6 +16,17 @@ const getType = (url) => {
   return ( extname in types )? types[extname] : "text/plain";
 };
 
+const getErrorStatusCode = (err) => {
+  let status = 500;
+  switch(err.code) {
+    case 'ENOENT':
+    default:
+      status = 404;
+    break;
+  }
+  return status;
+};
+
 const server = http.createServer((req, res) => {
   const url = path.relative('/', req.url);
 
@@ -25,19 +36,19 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     // レスポンスの中身を出力
     res.end('Hello World\n');
-  } else if( fs.existsSync(url) ) {
-      fs.readFile(url, (err, data) => {
-        if(!err) {
-          res.writeHead(200, {'Content-Type': getType(url)});
-          res.end(data);
-        } else {
-          res.statusCode = 500;
-          res.end();
-        }
-      });
   } else {
-    res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('404 file not found!\n');
+    fs.readFile(url, (err, data) => {
+      if(!err) {
+        res.writeHead(200, {'Content-Type': getType(url)});
+        res.end(data);
+      } else {
+        console.log(err, err.code);
+        const statusCode = getErrorStatusCode(err);
+        res.statusCode = statusCode
+        res.writeHead(statusCode, {'Content-Type': 'text/plain'});
+        res.end(err.message);
+      }
+    });
   }
 }).listen(port);
 
