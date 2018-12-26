@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Form Seialize</title>
+</head>
+<body>
+<form id="js-form">
+  <div>
+    <input type="text" name="data[0][0]" value="データA-1">
+    <input type="text" name="data[0][1]" value="データB-1">
+    <input type="text" name="data[0][2]" value="データC-1">
+    <input type="text" name="data[0][3]" value="データD-1">
+  </div>
+  <div>
+    <input type="text" name="data[1][0]" value="データA-2">
+    <input type="text" name="data[1][1]" value="データB-2">
+    <input type="text" name="data[1][2]" value="データC-2">
+    <input type="text" name="data[1][3]" value="データD-2">
+  </div>
+  <div>
+    <input type="text" name="data[2][0]" value="データA-3">
+    <input type="text" name="data[2][1]" value="データB-3">
+    <input type="text" name="data[2][2]" value="データC-3">
+    <input type="text" name="data[2][3]" value="データD-3">
+  </div>
+  <label><input type="checkbox" name="is_sjis" checked="checked" value="1"> Shift JIS</label><br>
+  <input type="submit" value="FORM DATA TO JSON">
+</form>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script>
+$(function() {
+const $form = $('#js-form');
+
+// jQuery.serialize() Return String: URL encorded `name=value` format and join '&'
+let params = $form.serialize();
+console.log(params);
+// data%5B0%5D%5B0%5D=%E3%83%87%E3%83%BC%E3%82%BFA-1&data%5B0%5D%5B1%5D=%E3%83%87%E3%83%BC%E3%82%BFB-1&data%5B0%5D%5B2%5D=%E3%83%87%E3%83%BC%E3%82%BFC-1&data%5B0%5D%5B3%5D=%E3%83%87%E3%83%BC%E3%82%BFD-1&data%5B1%5D%5B0%5D=%E3%83%87%E3%83%BC%E3%82%BFA-2&data%5B1%5D%5B1%5D=%E3%83%87%E3%83%BC%E3%82%BFB-2&data%5B1%5D%5B2%5D=%E3%83%87%E3%83%BC%E3%82%BFC-2&data%5B1%5D%5B3%5D=%E3%83%87%E3%83%BC%E3%82%BFD-2&data%5B2%5D%5B0%5D=%E3%83%87%E3%83%BC%E3%82%BFA-3&data%5B2%5D%5B1%5D=%E3%83%87%E3%83%BC%E3%82%BFB-3&data%5B2%5D%5B2%5D=%E3%83%87%E3%83%BC%E3%82%BFC-3&data%5B2%5D%5B3%5D=%E3%83%87%E3%83%BC%E3%82%BFD-3&is_sjis=1
+
+// jQuery.serializeArray() Return Array [{name:input.name, value:input.value}, ...]
+params = $form.serializeArray();
+console.log(params);
+// [{name: input.name, value: input.value}, ... ]
+
+// to json
+let jsonData = JSON.stringify( $form.serializeArray() );
+console.log(jsonData);
+//[{"name":"data[0][0]","value":"データA-1"}, ... ,{"name":"is_sjis","value":"1"}]
+
+$form.on('submit', function() {
+  const d = document;
+  const formData = JSON.stringify( $form.serializeArray() );
+  let textarea = d.querySelector('textarea');
+  if( textarea ) {
+    d.body.removeChild( textarea );
+  }
+  textarea = d.createElement('textarea');
+  textarea.value = formData;
+  textarea.style.cssText = "padding:1em; width:60%; height:12em;";
+  d.body.appendChild(textarea);
+  return false;
+});
+});
+</script>
+</body>
+</html>
