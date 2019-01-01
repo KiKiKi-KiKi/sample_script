@@ -1,0 +1,34 @@
+{
+  "articles": [
+    {"id": 1, "title": "json-server", "author": "CHAIKA"},
+    {"id": 2, "title": "aikatsu", "author": "Johnny"}
+  ],
+  "units": [
+    {
+      "id": 1,
+      "name": "soleil",
+      "members": [
+        {"id": 1, "name": "星宮いちご", "division": "スターライト学園" },
+        {"id": 2, "name": "霧矢あおい", "division": "スターライト学園" },
+        {"id": 3, "name": "紫吹蘭", "division": "スターライト学園" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Luminas",
+      "members": [
+        {"id": 1, "name": "大空あかり", "division": "スターライト学園" },
+        {"id": 2, "name": "氷川すみれ", "division": "スターライト学園" },
+        {"id": 3, "name": "新条ひなき", "division": "スターライト学園" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "WM",
+      "members": [
+        {"id": 1, "name": "神崎美月", "division": "LOVE MOONRISE" },
+        {"id": 2, "name": "夏樹みくる", "division": "ナツキグリーニングガーデン" }
+      ]
+    }
+  ]
+}
