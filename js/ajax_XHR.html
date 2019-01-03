@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<hrad>
+  <meta charaset="utf-8">
+  <title>XHR TEST</title>
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/4.1.0/superagent.min.js"></script>
+</hrad>
+<body>
+<pre data-code="sh">
+$ cd json-server
+$ yarn start
+</pre>
+<ul>
+  <li>Ajax (Ajax is "Asynchronous JavaScript + XML".)</li>
+  <li>XMLHttpRequest (XHR)</li>
+  <li>Fatch API<br>
+    https://developer.mozilla.org/ja/docs/Web/API/Fetch_API/Using_Fetch</li>
+  <li>axios<br>
+    https://github.com/axios/axios<br>
+    https://qiita.com/ksh-fthr/items/2daaaf3a15c4c11956e9</li>
+  <li>superagent<br>
+    http://visionmedia.github.io/superagent/</li>
+</ul>
+<script>
+const api = "http://localhost:3001/units";
+$(function() {
+  console.log("jQuery Ajax");
+  $.ajax({
+    url: api + '?name=soleil',
+    type: 'GET',
+    dataType: 'json'
+  })
+  .done(function(res, textStatus, jqXHR) {
+    console.log('jQuery Ajax: SUCCESS', res, textStatus);
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    console.log('jQuery Ajax: ERROR', textStatus);
+  });
+});
+
+console.log("XHR");
+const getXHR = (url) => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = () => {
+      return resolve( xhr.response );
+    };
+    xhr.onerror = () => {
+      return reject( xhr.statusText );
+    };
+    xhr.send();
+  });
+};
+
+getXHR(api + '?name=Luminas' )
+.then((res) => {
+  const data = JSON.parse(res);
+  console.log('XHR: SUCCESS', data);
+})
+.catch((error) => {
+  console.log('XHR: ERROR', error);
+});
+
+console.log('fetch API')
+fetch(api + '?name=WM', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then((res) => {
+  console.log('FatchAPI: Success', res)
+})
+.catch((err) => {
+  console.error('FatchAPI: Error', err);
+});
+
+
+console.log('axios');
+axios.get(api + '/1')
+.then((res) => {
+  console.log('axios: SUCCESS', res, res.data);
+})
+.catch((err) => {
+  console.log('axios: Error', err)
+});
+
+console.log('superagent');
+const request = window.superagent;
+request.get(api)
+.query({id: 2})
+.end((err, res) => {
+  if (err) throw new Error(err);
+  console.log(res, res.status);
+  console.log('superagent: SUCCESS', res.body);
+});
+</script>
+</body>
+</html>
