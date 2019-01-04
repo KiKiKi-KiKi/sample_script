@@ -101,6 +101,30 @@ request.get(api)
   console.log(res, res.status);
   console.log('superagent: SUCCESS', res.body);
 });
+
+console.log('superagent + Promise');
+// ref. https://qiita.com/lirispp/items/356572e689b9c2099c5c
+const callAPI = (param) => {
+  const api = 'http://localhost:3001/units'
+  return new Promise((resolve, reject) => {
+    request.get(api + '?name=' + param)
+    .end((err, res) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(res.body);
+      }
+    })
+  });
+};
+
+callAPI('Luminas')
+.then((res) => {
+  console.log('superagent + Promise: SUCESS', res);
+})
+.catch((err) => {
+  console.error('superagent + Promise: ERROR', err);
+});
 </script>
 </body>
 </html>
