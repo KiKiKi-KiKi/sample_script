@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charaset="utf-8">
+  <title>fetch API TEST</title>
+</head>
+<body>
+ref.
+<br><code>https://developer.mozilla.org/ja/docs/Web/API/Fetch_API/Using_Fetch</code>
+<br><code>https://app.codegrid.net/entry/2017-json-server-1</code>
+<ul id="todoList">
+</ul>
+
+<script>
+const api = 'http://localhost:3001';
+
+function todoListTemplate(data) {
+  const id = data.id;
+  return `<li id="todo-${id}">
+  <input class="title" type="text" value="${data.title}">
+  <small class="author">${data.author}</small>
+  <button class="btn-danger" onClick="onDelete(${id})">DELETE</button>
+  <button class="btn-info" onClick="onPut(${id})">EDIT</button>
+  </li>`;
+}
+
+function addTodoList(data) {
+  const area = document.getElementById('todoList');
+  const list = [];
+  if(Array.isArray(data)) {
+    for(let obj of data) {
+      console.log(obj);
+      list.push( todoListTemplate(obj) );
+    }
+  } else {
+    list.push( todoListTemplate(data) );
+  }
+  area.innerHTML += list.join("\n");
+}
+
+// GET
+fetch(`${api}/articles`)
+.then((res) => {
+  console.log(res);
+  return res.json(); // => Promise.resolved
+})
+.then((res) => {
+  console.log(res, typeof(res));
+  addTodoList(res);
+})
+.catch((err) => {
+  console.log(err);
+});
+
+// GET with params
+fetch(`${api}/articles/1`, {
+  method: 'GET',
+  headers: {'Content-Type': 'application/json'}
+})
+.then((res) => res.json())
+.then((data) => console.log(data))
+.catch((err) => console.log(err));
+
+</script>
+</body>
