@@ -43,6 +43,10 @@ function addTodoList(data) {
   area.innerHTML += list.join("\n");
 }
 
+function getTodoListbyId(id) {
+  return document.getElementById(`todo-${id}`);
+}
+
 // GET
 fetch(`${api}/articles`)
 .then((res) => {
@@ -76,6 +80,7 @@ function onPostForm() {
     author: authorInp.value
   };
   console.log('Post data', data, JSON.stringify(data));
+
   fetch(`${api}/articles`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -96,10 +101,43 @@ function onPostForm() {
 document.getElementById('onSubmit').addEventListener('click', onPostForm, false);
 
 
+// PUT
+function onPut(id) {
+  const _id = id - 0;
+  const list = getTodoListbyId(_id);
+  const titleInp = list.querySelector('.title');
+  const author = list.querySelector('.author');
+  const data = {
+    title: titleInp.value,
+    author: author.textContent.replace('[edited]', '').trim() + ' [edited]'
+  };
+
+  fetch(`${api}/articles/${_id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    // data can be `string` or {object}!
+    body: JSON.stringify(data)
+  })
+  .then((res) => {
+    console.log('PUT', res);
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    titleInp.value = data.title;
+    author.textContent = data.author;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+  return false;
+}
+
 // Delete
 function onDelete(id) {
   const _id = id - 0;
-  const list = document.getElementById(`todo-${_id}`);
+  const list = getTodoListbyId(_id);
+
   fetch(`${api}/articles/${_id}`, {
     method: 'DELETE'
   })
@@ -114,6 +152,7 @@ function onDelete(id) {
   .catch((err) => {
     console.log(err);
   })
+  return false;
 }
 </script>
 </body>
