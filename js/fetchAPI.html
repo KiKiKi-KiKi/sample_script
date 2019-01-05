@@ -46,7 +46,7 @@ function addTodoList(data) {
 // GET
 fetch(`${api}/articles`)
 .then((res) => {
-  console.log(res);
+  console.log('GET', res);
   return res.json(); // => Promise.resolved
 })
 .then((res) => {
@@ -66,6 +66,7 @@ fetch(`${api}/articles/1`, {
 .then((data) => console.log(data))
 .catch((err) => console.log(err));
 
+
 // POST
 function onPostForm() {
   const titleInp  = document.getElementById('formTitle');
@@ -82,7 +83,7 @@ function onPostForm() {
     body: JSON.stringify(data)
   })
   .then((res) => {
-    console.log(res);
+    console.log('POST', res);
     return res.json();
   })
   .then((data) => {
@@ -94,5 +95,25 @@ function onPostForm() {
 }
 document.getElementById('onSubmit').addEventListener('click', onPostForm, false);
 
+
+// Delete
+function onDelete(id) {
+  const _id = id - 0;
+  const list = document.getElementById(`todo-${_id}`);
+  fetch(`${api}/articles/${_id}`, {
+    method: 'DELETE'
+  })
+  .then((res) => {
+    console.log('DELETE', res);
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    list.parentNode.removeChild(list);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
 </script>
 </body>
