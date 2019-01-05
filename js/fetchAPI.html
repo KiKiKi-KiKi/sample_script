@@ -10,6 +10,11 @@ ref.
 <br><code>https://app.codegrid.net/entry/2017-json-server-1</code>
 <ul id="todoList">
 </ul>
+<div>
+  <label>Title: <input id="formTitle" type="text" name="title"></label>
+  <label>Author: <input id="formAuthor" type="text" name="author"></label>
+  <button id="onSubmit">POST</button>
+</div>
 
 <script>
 const api = 'http://localhost:3001';
@@ -60,6 +65,34 @@ fetch(`${api}/articles/1`, {
 .then((res) => res.json())
 .then((data) => console.log(data))
 .catch((err) => console.log(err));
+
+// POST
+function onPostForm() {
+  const titleInp  = document.getElementById('formTitle');
+  const authorInp = document.getElementById('formAuthor');
+  const data = {
+    title: titleInp.value,
+    author: authorInp.value
+  };
+  console.log('Post data', data, JSON.stringify(data));
+  fetch(`${api}/articles`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    // data can be `string` or {object}!
+    body: JSON.stringify(data)
+  })
+  .then((res) => {
+    console.log(res);
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    addTodoList(data);
+    titleInp.value = '';
+  })
+  .catch((err) => console.log(err));
+}
+document.getElementById('onSubmit').addEventListener('click', onPostForm, false);
 
 </script>
 </body>
