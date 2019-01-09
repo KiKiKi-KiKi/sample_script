@@ -125,6 +125,109 @@ callAPI('Luminas')
 .catch((err) => {
   console.error('superagent + Promise: ERROR', err);
 });
+
+console.log('-----------------------------');
+console.log('> POST');
+const api_url = 'http://localhost:3001/articles';
+
+console.log('XHR');
+const onPostJSONbyXHR = (url, data) => {
+  const jsonData = JSON.stringify(data);
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = () => {
+      console.log(xhr.status);
+      const data = JSON.parse(xhr.response);
+      return resolve(data);
+    };
+    xhr.onerror = () => {
+      console.log(xhr.status);
+      return reject(xhr.statusText);
+    };
+    xhr.send(jsonData);
+  });
+};
+onPostJSONbyXHR(api_url, {
+  title: 'XHR_POST',
+  author: 'XHR'
+})
+.then((res) => console.log(res))
+.catch((err) => console.error(err));
+
+console.log('FetchAPI');
+fetch(api_url, {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  // String or Object
+  body: JSON.stringify({
+    title: 'FetchAPI_POST',
+    author: 'FetchAPI'
+  })
+})
+.then((res) => res.json() )
+.then((data) => console.log(data))
+.catch((err) => console.error(err));
+
+console.log('axios');
+axios.post(api_url, {
+  title: 'axios_POST',
+  author: 'axios.post'
+})
+.then((res) => console.log(res, res.data))
+.catch((err) => console.log(err))
+.then(() => console.log('> axiox.post end'))
+
+axios({
+  method: 'POST',
+  url: api_url,
+  data: {
+    title: 'axios_POST via axios(config)',
+    author: 'axios(config)'
+  }
+})
+.then((res) => console.log(res, res.data))
+.catch((err) => console.log(err))
+.then(() => console.log('> axios(config) end'))
+
+
+axios(api_url, {
+  method: 'POST',
+  data: {
+    title: 'axios_POST via axios(url[, config])',
+    author: 'axios(url[, config])'
+  }
+})
+.then((res) => console.log(res, res.data))
+.catch((err) => console.log(err))
+.then(() => console.log('> axios(url[, config]) end'))
+
+
+console.log('superagent');
+request.post(api_url)
+.send({
+  title: 'superagent_POST',
+  author: 'superagent'
+})
+.set('Accept', 'application/json')
+.then((res) => console.log(res, res.body))
+.catch((err) => console.error(err));
+
+request.post(api_url)
+.send({
+  title: 'superagent_POST',
+  author: 'superagent Old-style'
+})
+.set('Accept', 'application/json')
+.end((err, res) => {
+  if(err) {
+    console.error(err);
+  } else {
+    console.log(res, res.body);
+  }
+});
+
 </script>
 </body>
 </html>
