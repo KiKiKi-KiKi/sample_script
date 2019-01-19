@@ -1,5 +1,4 @@
 'use strict';
-const api = 'http://localhost:3001';
 
 // async function はPromiseを返す
 // return すれば resolve
@@ -149,3 +148,33 @@ errorHandling(false)
   .catch((err) => console.log(err, 'catch'));
 // => > ERROR CATCH
 // => Error: Throw ERROR
+
+/*
+async function は Promiseを返す。`return`は`resolove`扱いになるので、エラーの場合は明示的に`reject`しなければならない。
+await は呼び出した処理から`Promise.resolove`/`Promise.reject`されるまで待機する
+*/
+
+// --------------------------------------------
+// FetchAPI
+// --------------------------------------------
+// node.jsで fetchAPI を使うには node-fetch が必要
+const fetch = require('node-fetch');
+
+const api = 'http://localhost:3001';
+
+const getDataByFetch = async () => {
+  try {
+    const res = await fetch(api + '/articles');
+    // fetchAPIは res.json() で Promiseを返すのでawaitを２重にする必要がある
+    const data = await res.json();
+    return data;
+  } catch(err) {
+    throw err;
+  }
+}
+
+setTimeout(() => {
+getDataByFetch()
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+}, 1000);
