@@ -6,9 +6,14 @@ async function resolveFunc() {
   return 'this resolve';
 }
 
-//
+// throw error すると reject になる
 async function rejectError() {
   throw new Error('throw Error');
+}
+
+// 値をthrow しても reject 扱い
+async function throwValue() {
+  throw 'throw Value';
 }
 
 // return すると resolveされる
@@ -24,10 +29,26 @@ rejectError()
 .catch((err)=> console.log(`ERROR ${err}`));
 // => ERROR Error: throw Error
 
+throwValue()
+.then((res) => console.log(res))
+.catch((err)=> console.log(`ERROR ${err}`));
+// => ERROR throw Value
+
 rejectFunc2()
 .then((res) => console.log(`RESOLVE ${res}`))
 .catch((err)=> console.log(`ERROR ${err}`));
 // => RESOLVE Error: retun Error
+
+// 何も返さない関数
+// 関数終了時の undefined が resolve される
+async function noReturnFunc() {
+  console.log('do not return anything');
+}
+
+noReturnFunc()
+.then((res) => console.log(`noReturnFunc > RESOLVE ${res}`))
+.catch((err)=> console.log(`noReturnFunc > ERROR ${err}`));
+// => noReturnFunc > RESOLVE undefined
 
 // --------------------------------------------
 // awaite
@@ -64,6 +85,17 @@ getSquareAndAddByPromise(2, 1)
   .then((res) => console.log(res, `Promise`))
   .catch((err) => console.log(err, `Promise`));
 // => 5 'Promise'
+
+// async / await で何も返さない場合も
+// 関数が終了時の undefined が resolve される
+async function awaitNoReturnFunc() {
+  const res = await waitSquareFunc(2);
+}
+
+awaitNoReturnFunc()
+.then((res) => console.log(`waitNoReturnFunc > RESOLVE ${res}`))
+.catch((err)=> console.log(`waitNoReturnFunc > ERROR ${err}`));
+// => waitNoReturnFunc > RESOLVE undefined
 
 // --------------------------------------------
 // ERROR ハンドリング
