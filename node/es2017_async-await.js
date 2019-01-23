@@ -201,12 +201,25 @@ const getDataByFetch = async () => {
     const data = await res.json();
     return data;
   } catch(err) {
-    throw err;
+    throw err.message;
   }
 }
 
+// fetch でエラーになるとPromise.rejectになるのでtry-catchは不要
+const getDataByFetchNoTryCatch = async () => {
+  const res = await fetch(api + '/articles');
+  // fetchAPIは res.json() で Promiseを返すのでawaitを２重にする必要がある
+  const data = await res.json();
+  return data;
+}
+
 setTimeout(() => {
+console.log('----------------------');
 getDataByFetch()
+  .then((res) => console.log('Then', res))
+  .catch((err) => console.log('ERROR', err));
+
+getDataByFetchNoTryCatch()
   .then((res) => console.log(res))
   .catch((err) => console.log(err));
 }, 1000);
