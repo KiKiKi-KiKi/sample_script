@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>classList / className</title>
+  <style>
+    .col-info {color: #408FD6;}
+    .col-warn {color: #D6A442;}
+    .bold     {font-weight: bold;}
+  </style>
+</head>
+<body>
+<div><span id="p1" class="p">#p1</span> <button onClick="onBold('p1')">bold</button> | <button onClick="onColor('p1')">Color</button></div>
+<div><span id="p2" class="p">#p2</span> <button onClick="onBold('p2')">bold</button> | <button onClick="onColor('p2')">Color</button></div>
+<button onClick="toggleColor();">toggle color</button> | <button onClick="changeColor();">change color</button> | <button onClick="reset();">reset</button>
+<script>
+/*
+const $p2 = document.getElementById('p2');
+// 1つめが取得される
+const $p1 = document.querySelector('.p');
+*/
+function onBold(id) {
+  const $elm = document.getElementById(id);
+  // classList.contains: クラスの有無を返す
+  const hasClass = $elm.classList.contains('bold');
+  let res;
+  console.log('has class?', hasClass);
+  if( hasClass ) {
+    console.log('> remove');
+    res = $elm.classList.remove('bold');
+  } else {
+    console.log('> add');
+    res = $elm.classList.add('bold');
+  }
+  console.log($elm, res);
+}
+function onColor(id) {
+  const $elm = document.getElementById(id);
+  const colors = ['col-info', 'col-warn'];
+  const index = $elm.id === 'p1'? 0 : 1;
+  const rIndex = !index - 0;
+  let res;
+  if( $elm.classList.contains( colors[rIndex] ) ) {
+    console.log('> replace');
+    // classList.replace
+    res = $elm.classList.replace(colors[rIndex], colors[index]);
+  } else {
+    console.log('> toggle');
+    res = $elm.classList.toggle( colors[index] );
+  }
+  console.log($elm, res);
+}
+
+function toggleColor() {
+  const p = document.querySelectorAll('.p');
+  let res;
+  p.forEach(function(elm) {
+    if( elm.id === 'p1' ) {
+      res = elm.classList.toggle('col-info');
+    } else {
+      res = elm.classList.toggle('col-warn');
+    }
+    console.log('> toggle', elm, res);
+  })
+}
+
+function changeColor() {
+  const p = document.querySelectorAll('.p');
+  let res;
+  p.forEach(function(elm) {
+    if( elm.id === 'p1' ) {
+      res = elm.classList.replace('col-info', 'col-warn');
+    } else {
+      res =elm.classList.replace('col-warn', 'col-info');
+    }
+    console.log('> replace', elm, res);
+    console.log('classList', elm.classList);
+  });
+}
+
+function reset() {
+  const p = document.querySelectorAll('.p');
+  p.forEach(function(elm) {
+    let les = elm.className = 'p';
+    console.log('> className', elm, les);
+  });
+}
+</script>
+</body>
+</html>
