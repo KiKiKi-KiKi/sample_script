@@ -10,10 +10,42 @@
   </style>
 </head>
 <body>
+<div id="main" class="c1, c2, c3"></div>
 <div><span id="p1" class="p">#p1</span> <button onClick="onBold('p1')">bold</button> | <button onClick="onColor('p1')">Color</button></div>
 <div><span id="p2" class="p">#p2</span> <button onClick="onBold('p2')">bold</button> | <button onClick="onColor('p2')">Color</button></div>
 <button onClick="toggleColor();">toggle color</button> | <button onClick="changeColor();">change color</button> | <button onClick="reset();">reset</button>
 <script>
+const main = document.getElementById('main');
+const classList = main.classList;
+console.log(classList);
+// => DOMTokenList(3) ["c1,", "c2,", "c3", value: "c1, c2, c3"]
+
+// DOMに付いているクラスの数
+console.log(classList.length);
+// => 3
+
+// インデックスでアクセスするとクラス名が取得できる
+console.log( classList[0] );
+// => c1
+// 存在しないインデックス
+console.log( classList[100] );
+// => undefined
+
+// classList.item(n)
+console.log( classList.item(0) );
+// => c1
+console.log( classList.item(100) );
+// => null
+// ※ 存在しないインデックスを指定した場合、classList[n] と classList.item(n) とで返される値が異なる
+
+// Element.classList.value = Element.className
+console.log(classList.value);
+// => c1, c2, c3
+console.log( main.className );
+// => c1, c2, c3
+console.log( classList.value === main.className );
+// => true
+
 /*
 const $p2 = document.getElementById('p2');
 // 1つめが取得される
