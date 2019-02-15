@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>get Element without jQuery</title>
+</head>
+<body>
+<div id="app" class="app1">
+  <h1 id="title">Title</h1>
+  <p class="text red">text1</p>
+  <p class="text blue">text2</p>
+  <div class="content">
+    <p class="text blue">text4</p>
+  </div>
+</div>
+<div id="app" class="app2"></div>
+<footer>
+  <p class="small text red">text3</p>
+</footer>
+<script>
+// ----------------------------
+// Document.getElementById
+// ----------------------------
+console.log('>> Document.getElementById ------');
+
+const app = document.getElementById('app');
+console.log(app); // => app1
+console.log( document.getElementById('notfound') ); // => null
+// app.getElementById('title');
+// => Uncaught TypeError:
+
+// ----------------------------
+// Document.getElementsByClassName
+// ----------------------------
+console.log('>> Document.getElementsByClassName ------');
+
+const texts = document.getElementsByClassName('text');
+console.log(texts);
+// => HTMLCollection(3) [p.text.red, p.text.blue, p.small.text.red]
+console.log( texts.length );
+// => 3
+console.log(texts[0]);
+// => <p class="text red">text1</p>
+console.log(texts[100]);
+// => undefined
+
+const app_texts = app.getElementsByClassName('text');
+console.log(app_texts);
+// => HTMLCollection(2) [p.text.red, p.text.blue]
+
+const red_text = document.getElementsByClassName('text red');
+console.log( red_text );
+// => HTMLCollection(2) [p.text.red, p.small.text.red]
+
+// red_text.forEach((elm) => console.log(elm));
+// => getelement.html:42 Uncaught TypeError
+
+for(let i=0, l=red_text.length; i<l; i+=1) {
+  console.log( red_text[i].textContent );
+}
+// text1, text3
+
+const red_text_arg = Array.from( red_text );
+console.log( red_text_arg );
+// => [p.text.red, p.small.text.red]
+red_text_arg.forEach((elm) => console.log(elm.textContent));
+// => text1, text3
+
+const notFoundClass = document.getElementsByClassName('notfound');
+console.log( notFoundClass );
+// => HTMLCollection []
+console.log( notFoundClass.length );
+// => 0
+console.log( notFoundClass[0] );
+// => undefined
+
+// ----------------------------
+// Document.querySelector
+// ----------------------------
+console.log('>> Document.querySelector ------');
+
+const title = document.querySelector('#title');
+console.log(title);
+// => <h1 id="title">Title</h1>
+console.log( app.querySelector('.content .text') );
+// => <p class="text blue">text4</p>
+console.log( document.querySelector('#notFoundID') );
+// => null
+console.log( app.querySelector('.text.blue') );
+// => <p class="text blue">text2</p>
+
+// ----------------------------
+// Document.querySelectorAll
+// ----------------------------
+console.log('>> Document.querySelectorAll ------');
+
+const textNodeList = document.querySelectorAll('.text');
+console.log( textNodeList );
+// => NodeList(4) [p.text.red, p.text.blue, p.text.blue, p.small.text.red]
+console.log( textNodeList.length );
+// => 4
+console.log( textNodeList[0] );
+// => <p class="text red">text1</p>
+console.log( textNodeList[100] );
+// => undefined
+
+const notFoundNodeList = document.querySelectorAll('.notFoundClass');
+console.log( notFoundNodeList );
+// => NodeList []
+console.log( notFoundNodeList.length );
+// => 0
+console.log( notFoundNodeList[0] );
+// => undefined
+
+const appTextNodes = app.querySelectorAll('.text.blue');
+appTextNodes.forEach((elm) => console.log(elm));
+// => <p class="text blue">text2</p>
+// => <p class="text blue">text4</p>
+
+for(let val of appTextNodes) {
+  console.log(val);
+}
+// => <p class="text blue">text2</p>
+// => <p class="text blue">text4</p>
+
+// appTextNodes.map((elm, i) => elm.innerHTML = `text-${i}`);
+// appTextNodes.filter((elm)=> elm);
+// appTextNodes.some((elm)=> elm);
+// appTextNodes.reduce((x, y) => x);
+// => Uncaught TypeError
+
+[...appTextNodes].map((elm, i) => {
+  elm.innerHTML = `text-${i}`;
+  console.log(elm);
+});
+
+Array.from(appTextNodes).map((elm, i) => {
+  elm.classList.replace('blue', 'green');
+  console.log(elm);
+});
+
+</script>
+</body>
+</html>
