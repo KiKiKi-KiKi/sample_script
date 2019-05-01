@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<script>
+const g = window || this;
+
+const m = 3;
+let jsString1 = "var n = 1; console.log(n, m);";
+let jsString2 = "var j = 2; console.log(j, m);";
+
+console.log('>> eval');
+eval(jsString1); // 1, 3
+console.log(g.n);  // 1
+(function() {
+  let a = 'foo';
+  eval("console.log(a, m); a = 'bar';"); // 'foo', 3
+  console.log(a); // 'bar'
+})();
+console.log(typeof a); // undefined
+
+console.log('>> new Function');
+new Function(jsString2)(); // 2, 3
+console.log(g.j); // undefined
+(function() {
+  let a = 'foo';
+  // local 変数にアクセスできないので global に変数を作成してしまう！
+  new Function("console.log(typeof a, m); a = 'bar';")(); // undefined, 3
+  console.log(a); // 'foo'
+})();
+console.log(typeof a, a); // string, 'bar'
+</script>
+
+<script>
+"use strict";
+console.log('>> use strict');
+jsString1 = "var nn = 1; console.log(nn, m);";
+jsString2 = "var jj = 2; console.log(jj, m);";
+
+console.log('>> eval');
+eval(jsString1); // 1, 3
+console.log(g.nn);  // undefined
+(function() {
+  let b = 'foo';
+  eval("console.log(b, m); b = 'bar';"); // 'foo', 3
+  console.log(b); // 'bar'
+})();
+console.log(typeof b); // undefined
+
+console.log('>> new Function');
+new Function(jsString2)(); // 2, 3
+console.log(g.jj); // undefined
+(function() {
+  let b = 'foo';
+  // local 変数にアクセスできないので global に変数を作成してしまう！
+  new Function("console.log(typeof b, m); b = 'bar';")(); // undefined, 3
+  console.log(b); // 'foo'
+})();
+console.log(typeof b, b); // string, 'bar'
+
+console.log(g);
+</script>
+</body>
+</html>
