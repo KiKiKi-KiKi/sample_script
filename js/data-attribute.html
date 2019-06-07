@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>data attribute</title>
+</head>
+<body>
+<div id="elm01" data-name="foo" data-change-count="0">
+  <p>#elm01</p>
+  <code>data-name</code> is <i class="dataName"></i><br>
+  <code>data-set-count</code> is <i class="setCount"></i>
+  <div>
+    <input type="text" placeholder="set data">
+  </div>
+</div>
+<div id="elm02" data-name="bar" data-change-count="0">
+  <p>#elm02</p>
+  <code>data-name</code> is <i class="dataName"></i><br>
+  <code>data-set-count</code> is <i class="setCount"></i>
+  <div>
+    <input type="text" placeholder="set data">
+  </div>
+</div>
+<script>
+const elements = ['#elm01', '#elm02'];
+
+function displayData(target = elements) {
+  if( !Array.isArray(target) ) {
+    target = [target];
+  }
+  target.map((elm) => {
+    const $elm = document.querySelector(elm);
+    if( !$elm ) {
+      return;
+    }
+    console.log($elm.dataset);
+    const $name = $elm.querySelector('.dataName');
+    const $count = $elm.querySelector('.setCount');
+    $name.textContent = $elm.dataset.name;
+    $count.textContent = $elm.dataset.changeCount;
+  });
+};
+
+function setName(elm, value) {
+  const $elm = document.querySelector(elm);
+  const name = $elm.dataset.name;
+  if( name === value ) {
+    console.log(`Same! don't change: ${name} -> ${value}`);
+    return;
+  }
+  let count = $elm.dataset.changeCount - 0;
+  $elm.dataset.name = value;
+  $elm.dataset.changeCount = count += 1
+  displayData(elm);
+}
+
+elements.map((elm) => {
+  const $elm = document.querySelector(elm);
+  const $inp = $elm.querySelector('input[type="text"]');
+  $inp.addEventListener('change', () => {
+    setName(elm, $inp.value);
+    $inp.value = "";
+  });
+});
+
+displayData();
+</script>
+</body>
