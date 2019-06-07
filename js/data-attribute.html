@@ -21,6 +21,7 @@
     <input type="text" placeholder="set data">
   </div>
 </div>
+<div id="elm03" data-name="baz" data-changeCount="0"></div>
 <script>
 const elements = ['#elm01', '#elm02'];
 
@@ -33,9 +34,17 @@ function displayData(target = elements) {
     if( !$elm ) {
       return;
     }
-    console.log($elm.dataset);
+
     const $name = $elm.querySelector('.dataName');
     const $count = $elm.querySelector('.setCount');
+
+    console.log($elm.dataset);
+
+    const attrCount = $elm.getAttribute('data-change-count');
+    const datasetCount = $elm.dataset.changeCount;
+    console.log('getattribute', attrCount, typeof(attrCount));
+    console.log('dataset', datasetCount, typeof(datasetCount));
+
     $name.textContent = $elm.dataset.name;
     $count.textContent = $elm.dataset.changeCount;
   });
@@ -64,5 +73,16 @@ elements.map((elm) => {
 });
 
 displayData();
+!function() {
+  const $elm03 = document.getElementById('elm03');
+  console.log($elm03.dataset);
+  const attrCount = $elm03.getAttribute('data-changeCount');
+  const datasetCount = $elm03.dataset.changeCount;
+  console.warn(`CamelCase data name can't get by Element.dataset:
+  e.g. data-changeCount="0"
+  getAttribute: ${attrCount} (${typeof(attrCount)})
+  dataset: ${datasetCount} (${typeof(datasetCount)})`);
+  console.warn( $elm03.dataset.changecount );
+}();
 </script>
 </body>
