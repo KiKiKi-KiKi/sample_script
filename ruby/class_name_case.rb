@@ -46,12 +46,27 @@ def class_type_check_with_case n
   p "n.class is #{n.class}"
   # => n.class is A"
 
+  case n.class.name
+  when 'A' then p "A"
+  when 'B' then p "B"
+  end
+  # => "A"
+
   case n.class
   when A then p "A"
   when B then p "B"
   when Class then p "Class"
   end
   # => "Class"
+
+  case n.class
+  when A then p "A"
+  when B then p "B"
+  when String then p "String"
+  when Module then p "Module"
+  when Class then p "Class"
+  end
+  # => "Module"
 
   case n
   when A then p "A"
@@ -64,21 +79,89 @@ end
 
 class_type_check_with_case A.new
 
+p "case は === を使った if-elsif-end と等価"
+p "whenの条件 === caseの比較対象 として扱われる"
+
+a = A.new
+p a.class # => A
+
+p "A === a.class?"
+if A === a.class
+  p true
+else
+  p false
+end
+# => false
+
+puts "A == a.class?"
+if A == a.class
+  p true
+else
+  p false
+end
+# => true
+
+p '---'
+
+p 'a.class.kind_of?(A)'
+p a.class.kind_of?(A)
+# => false
+
+p '-----'
+
+puts "Class === a.class?"
+if Class === a.class
+  p true
+else
+  p false
+end
+# => true
+
+p '---'
+
+p 'a.class.kind_of?(Class)'
+p a.class.kind_of?(Class)
+# => true
+
+p 'a.class.kind_of?(Module)'
+p a.class.kind_of?(Module)
+# => true
+
+p 'a.class.kind_of?(Object)'
+p a.class.kind_of?(Object)
+# => true
+
+p '-----'
+
+puts "A === a?"
+if A === a
+  p true
+else
+  p false
+end
+# => true
+
+p '---'
+
+p 'a.kind_of?(A)'
+p a.kind_of?(A)
+# => true
+
 p '------'
-
-p "str".class.name === "String"
-# => true
-
-p "str" === String
-# => true
 p "str".class
 # => String
-p "str".class === String
+
+p "String" === "str".class.name
+# => true
+
+p String === "str"
+# => true
+
+p String === "str".class
 # => false
-p "str".class == String
+
+p String == "str".class
 # => true
 
-p String.class === Class
+p Class === String.class
 # => true
-
-
