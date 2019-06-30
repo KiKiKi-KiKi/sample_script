@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<h1>Non-Breaking Space</h1>
+<p id="p1">星宮 いちご</p>
+<p id="p2">星宮&nbsp;いちご</p>
+<ol>
+  <li>'星宮 いちご'</li>
+  <li>'星宮 いちご'</li>
+  <li>'星宮&amp;nbsp;いちご'</li>
+  <li>'星宮\u0020いちご'</li>
+  <li>'星宮\u00A0いちご'</li>
+</ol>
+
+<pre>
+  text: '星宮&amp;nbsp;いちご'
+  '星宮\u00A0いちご' === elm.innerText // true
+  '星宮\u00A0いちご' === elm.firstChild.nodeValue // true
+  '星宮\u00A0いちご' === elm.textContent // true
+  '星宮&amp;nbsp;いちご' === elm.innerHTML // true
+</pre>
+<script>
+const p1 = document.getElementById('p1');
+const p2 = document.getElementById('p2');
+
+const printContent = (elm) => {
+  const text = ['星宮 いちご', '星宮 いちご', '星宮&nbsp;いちご', '星宮\u0020いちご', '星宮\u00A0いちご'];
+
+  console.log(elm.id);
+  console.log(`inngerText ${ elm.innerText }`);
+  console.log(`nodeValue ${ elm.firstChild.nodeValue }`);
+  console.log(`textContent ${ elm.textContent }`);
+  console.log(`innerHTML ${ elm.innerHTML }`);
+
+  console.log('text match');
+  const content = {
+    inngerText: elm.innerText,
+    nodeValue: elm.firstChild.nodeValue,
+    textContent: elm.textContent,
+    innerHTML: elm.innerHTML,
+  }
+  text.forEach((str, i) => {
+    console.log(i+1, str);
+    Object.keys(content).forEach(function(key) {
+      const val = this[key];
+      const result = val === str;
+      if( result ) {
+        console.info(key, result);
+      } else {
+        console.warn(key, result);
+      }
+    }, content);
+  });
+  console.log('-----------------------');
+};
+printContent(p1);
+printContent(p2);
+</script>
+</body>
+</html>
