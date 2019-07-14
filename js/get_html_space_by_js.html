@@ -7,6 +7,7 @@
 <h1>Non-Breaking Space</h1>
 <p id="p1">星宮 いちご</p>
 <p id="p2">星宮&nbsp;いちご</p>
+<p id="p3">&nbsp;星宮 いちご&nbsp;</p>
 <ol>
   <li>'星宮 いちご'</li>
   <li>'星宮 いちご'</li>
@@ -58,6 +59,19 @@ const printContent = (elm) => {
 };
 printContent(p1);
 printContent(p2);
+
+const replaceP2 = p2.textContent.replace(/\s/g, ' ');
+console.log( replaceP2 === '星宮 いちご' );
+// true
+console.log( replaceP2 === '星宮\u0020いちご' );
+// true
+
+const p3 = document.getElementById('p3');
+const trimText = p3.textContent.trim();
+console.log( trimText === '星宮 いちご' );
+// true
+console.log( trimText === '星宮\u0020いちご' );
+// true
 </script>
 </body>
 </html>
