@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>NodeList vs HTMLCollection</title>
+<head>
+<meta charset="utf-8">
+<style>
+button {
+  display: inline-block;
+  line-height: 2em;
+  max-width: 230px;
+  width: 45%;
+}
+pre {
+  border: 1px solid #ededed;
+  background: #eee;
+  padding: 1em;
+}
+.main {
+  margin: 1em auto;
+  max-width: 960px;
+}
+.row {
+  display: flex;
+  width: 100%;
+}
+.half {
+  width: 50%;
+}
+</style>
+</head>
+<body>
+ref. <a href="https://chaika.hatenablog.com/entry/2019/09/09/083000">JavaScript NodeList, HTMLCollection は配列(Array)ではない</a>
+<ul>
+  <li>NodeList は取得した時点の要素を保持する (静的)</li>
+  <li>HTMLCollection は要素数に変化があれば増減後の要素になる (動的・参照)</li>
+</ul>
+<ul>
+  <li>NodeList は forEach でループ処理することができる</li>
+  <li>HTMLCollection は forEach も使えない</li>
+</ul>
+<small>NodeList, HTMLCollection 共に map, filter といったArrayメソッドは使えない</small>
+<div class="main">
+  <div class="row">
+    <div class="half">
+      <button id="addBtn">ADD Item</button>
+      <button id="changeBtn">Change Item Text</button>
+      <ul id="list" data-num="3">
+        <li>list-1</li>
+        <li>list-2</li>
+        <li>list-3</li>
+      </ul>
+    </div>
+    <div class="half"><b>log</b>
+      <pre id="pre"></pre>
+    </div>
+  </div>
+</div>
+<script>
+const d = document;
+const list = d.getElementById('list');
+const nodelist = list.querySelectorAll('li');
+const collection = list.children;
+
+function printText(text) {
+  const pre = d.getElementById('pre');
+  if(pre.textContent) {
+    text += "\n----\n"
+  }
+  pre.textContent = text + pre.textContent;
+}
+
+function listNum() {
+  const text = [
+    `NodeList(${nodelist.length})`,
+    `HTMLCollection(${collection.length})`,
+  ];
+  printText(text.join("\n"));
+}
+
+listNum();
+
+const addBtn = d.getElementById('addBtn');
+const changeBtn = d.getElementById('changeBtn');
+
+addBtn.addEventListener('click', function(evt) {
+  const n = list.dataset.num - 0 + 1;
+  const li = d.createElement('li');
+  li.textContent = `list-${n}`;
+  list.dataset.num = n;
+  list.appendChild(li);
+  listNum();
+});
+
+changeBtn.addEventListener('click', function(evt) {
+  const listNum = list.dataset.num - 0;
+  const n = Math.floor(Math.random() * listNum);
+  //const n = list.children.length - 1;
+  const li = list.children[n];
+  const editNum = li.dataset.change - 0 || 0
+  li.dataset.change = editNum + 1;
+  li.textContent = `list-${n + 1}-${editNum + 1}: ${Date.now()}`;
+  
+  const text = [nodelist, collection].map((arg, i) => {
+    const name = i? 'HTMLCollection' : 'NodeList';
+    if(arg[n]) {
+      const data = arg[n];
+      return `${data.textContent} (${name})`;
+    } else {
+      return `list-${n+1} is undefined (${name})`;
+    }
+  });
+  printText(text.join("\n"));
+});
+</script>
+</body>
+</html>
