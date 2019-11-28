@@ -26,5 +26,8 @@
     "nib": "^1.1.2",
     "run-sequence": "^1.1.2",
     "rupture": "^0.7.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
   }
 }
