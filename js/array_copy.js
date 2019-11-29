@@ -39,6 +39,18 @@ console.log(array);
 
 array[0][1] = 1;
 
+// Object.assign() is shallow copy
+console.log('Object.assign() ------');
+const objectAssignArray = Object.assign([], array);
+objectAssignArray[1] = 'b';
+objectAssignArray[0][1] = 'b';
+console.log(objectAssignArray);
+
+console.log(array);
+
+
+array[0][1] = 1;
+
 // JSON.parse(JSON.stringify()) is deep copy
 console.log('JSON.parse(JSON.stringify()) -------')
 let jsonArray = JSON.parse(JSON.stringify(array));
@@ -77,5 +89,6 @@ console.log(array);
 ref.
 - https://medium.com/@gamshan001/javascript-deep-copy-for-array-and-object-97e3d4bc401a
 - https://qiita.com/knhr__/items/d7de463bf9013d5d3dc0
+  - https://qiita.com/rentondesu/items/f3e8924af2fcd3c28598
   - https://lodash.com/docs/4.17.15#cloneDeep
 */
