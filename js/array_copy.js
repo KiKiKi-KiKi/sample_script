@@ -92,3 +92,105 @@ ref.
   - https://qiita.com/rentondesu/items/f3e8924af2fcd3c28598
   - https://lodash.com/docs/4.17.15#cloneDeep
 */
+
+console.log('--------');
+
+const arg = [
+  {name: 'Shamiko'},
+  {name: 'Chiyoda Momo'},
+];
+
+const arrayReset = () => {
+  console.log('================');
+  arg.length = 0;
+  arg.push( {name: 'Shamiko'} );
+  arg.push( {name: 'Chiyoda Momo'} )
+  console.log(arg);
+  console.log('---');
+};
+
+let copyArray = arg;
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+
+console.log(copyArray);
+console.log(copyArray);
+console.log(copyArray === arg)
+
+arrayReset();
+// Slice
+console.log('Slice()');
+copyArray = arg.slice();
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+console.log(arg);
+
+arrayReset();
+// Spread syntax
+console.log('Spread syntax');
+copyArray = [...arg];
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+console.log(arg);
+
+arrayReset();
+// Array.from()
+console.log('Array.from()');
+copyArray = Array.from(arg);
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+console.log(arg);
+
+arrayReset();
+// Object.assign()
+console.log('Object.assign()');
+copyArray = Object.assign([], arg);
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+console.log(arg);
+
+arrayReset();
+// JSON
+console.log('JSON');
+copyArray = JSON.parse(JSON.stringify(arg));
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+console.log(arg);
+
+console.log('================');
+const arg2 = [
+  new Date(),
+  () => { console.log('function') },
+];
+console.log(arg2);
+
+copyArray = JSON.parse(JSON.stringify(arg2));
+console.log(copyArray);
+
+// lodash
+console.log('================');
+console.log('lodash#cloneDeep');
+arg.push( new Date() );
+arg.push( {func() {console.log('foo');}} );
+console.log(arg);
+copyArray = _.cloneDeep(arg);
+console.log(copyArray === arg); // false
+copyArray.push({name: 'Hinatsuki Mikan'});
+copyArray[0].name = 'Ririsu';
+console.log(copyArray);
+// => [{name: 'Ririsu'}, {name: 'Chiyoda Momo'}, 2019-11-29T10:57:00.595Z, {func: [Function: func]}, {name: 'Hinatsuki Mikan'}]
+console.log(arg);
+// => [{name: 'Shamiko'}, {name: 'Chiyoda Momo'}, 2019-11-29T10:57:00.595Z, {func: [Function: func]}]
+
+console.log( copyArray[2].getFullYear() ); // => 2019
+copyArray[3].func(); // => 'foo'
