@@ -74,3 +74,27 @@ console.log('---');
   // const { a: c, b: b } = obj;
   console.log(b, c);
 }();
+
+console.log('---');
+!function() {
+  const obj = { foo: 1, bar: 2 };
+  const { foo, bar, buzz } = obj;
+  console.log( foo, bar, buzz );
+  // => 1, 2, undefined
+}();
+
+console.log('---');
+!function() {
+  const obj = { foo: 1, bar: 2 };
+  const { foo, bar, buzz = "hoge" } = obj;
+  console.log( foo, bar, buzz );
+  // => 1, 2, 'hoge';
+}();
+
+console.log('---');
+!function() {
+  const obj = { foo: 1, bar: undefined, buzz: undefined };
+  const { foo = "foo", bar = "bar", buzz = null } = obj;
+  console.log( foo, bar, buzz );
+  // => 1, 'bar' null;
+}();
