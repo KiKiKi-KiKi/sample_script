@@ -46,6 +46,10 @@ const isNumberAllowString = (n) => {
   return false;
 };
 
+const numberIsFinite = (n) => {
+  return Number.isFinite(n);
+};
+
 // test
 const testData = [
   {
@@ -147,5 +151,13 @@ testData.forEach((data) => {
   const expect = data.expect;
   data.list.forEach((val) => {
     checkEqual( val )({func: badIsNumber, expect});
+  });
+});
+
+console.log('Number.isFinite----');
+testData.forEach((data) => {
+  const expect = data.expect;
+  data.list.forEach((val) => {
+    checkEqual( val )({func: numberIsFinite, expect});
   });
 });
