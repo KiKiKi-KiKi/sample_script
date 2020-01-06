@@ -89,12 +89,15 @@ console.log('SORT DESC');
 const idolsOrderByScoreDESC = sortByScoreAndID(idols)('DESC');
 console.log(idolsOrderByScoreDESC);
 
+console.log("\n");
 console.log('> map Name');
 console.log( mapDataToKeyArray(idolsOrderByScoreDESC, 'name') );
 
+console.log("\n");
 console.log('> map RankingArray');
 console.log( mapDataToRankingArray(idolsOrderByScoreDESC, 'name')('score') );
 
+console.log("\n");
 console.log('> map RankingArray skip same rank');
 console.log( mapDataToRankingArraySkipRankBeforeSameRanks(idolsOrderByScoreDESC, 'name')('score') );
 
@@ -118,31 +121,24 @@ console.log( addRankingByIds(idolsOrderByScoreDESC)() );
 console.log("\n");
 console.log('>> Ranking Allow Same Rank');
 
-const addRankingAllowSameRank = (list, id = 'id') => (sorted, key = 'score') => {
+const addRankingAllowSameRank = (list, id = 'id') => (sorted, key = 'score') => (allowSkipRank = true) => {
   sorted = sorted || list;
-  const rankingList = mapDataToRankingArray(sorted, id)(key);
+  const rankingList = allowSkipRank
+    ? mapDataToRankingArraySkipRankBeforeSameRanks(sorted, id)(key)
+    : mapDataToRankingArray(sorted, id)(key);
   return list.map((item) => {
     const ranking = getIndexFromRankArray(rankingList)(item[id]) + 1;
     return {...item, ranking: ranking || null};
   });
 };
 
-console.log( addRankingAllowSameRank(idols)(idolsOrderByScoreDESC) );
+console.log( addRankingAllowSameRank(idols)(idolsOrderByScoreDESC)(false) );
 console.log('---');
-console.log( addRankingAllowSameRank(idolsOrderByScoreDESC)() );
+console.log( addRankingAllowSameRank(idolsOrderByScoreDESC)()(false) );
 
 console.log("\n");
 console.log('>> Ranking Allow Same Rank And Skin Rank after same ranks');
 
-const addRankingAllowSameRankWithSkip = (list, id = 'id') => (sorted, key = 'score') => {
-  sorted = sorted || list;
-  const rankingList = mapDataToRankingArraySkipRankBeforeSameRanks(sorted, id)(key);
-  return list.map((item) => {
-    const ranking = getIndexFromRankArray(rankingList)(item[id]) + 1;
-    return {...item, ranking: ranking || null};
-  });
- };
-
- console.log( addRankingAllowSameRankWithSkip(idols)(idolsOrderByScoreDESC) );
+console.log( addRankingAllowSameRank(idols)(idolsOrderByScoreDESC)(true) );
 console.log('---');
-console.log( addRankingAllowSameRankWithSkip(idolsOrderByScoreDESC)() );
+console.log( addRankingAllowSameRank(idolsOrderByScoreDESC)()(true) );
