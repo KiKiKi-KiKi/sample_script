@@ -6,7 +6,7 @@ const idols = [
   {id: 3,  name: '紫吹蘭',     score: 80},
   {id: 4,  name: '有栖川おとめ', score: 85},
   {id: 5,  name: '藤堂ユリカ',  score: 87},
-  {id: 6,  name: '神崎美月',   score: 92},
+  {id: 6,  name: '神崎美月',    score: 92},
   {id: 7,  name: '夏樹みくる',  score: 80},
   {id: 8,  name: '大空あかり',  score: 92},
   {id: 9,  name: '氷上すみれ',  score: 83},
@@ -37,44 +37,51 @@ const mapDataToKeyArray = (arr, key = 'id') => {
 
 const getIndexFromRankArray = (arr) => (id) => {
   return arr.findIndex((keys) => {
+    if ( !Array.isArray(keys) || !keys.length ) {
+      return false;
+    }
+
     return keys.some((_id) => {
       return _id === id;
     });
   });
-}
+};
 
 const mapDataToRankingArray = (arr, id = 'id') => (key = 'score') => {
-  return arr.reduce((accumlator, item, index, _list) => {
+  return arr.reduce((accumulator, item, index, _list) => {
     if ( index > 0 ) {
       const prevValue = _list[index - 1][key];
       // same ranking
       if ( prevValue === item[key] ) {
-        accumlator[accumlator.length - 1].push(item[id]);
-        return accumlator;
+        accumulator[accumulator.length - 1].push(item[id]);
+        return accumulator;
       }
     }
-    accumlator[accumlator.length] = [item[id]];
-    return accumlator;
+    accumulator[accumulator.length] = [item[id]];
+    return accumulator;
   }, []);
 };
 
-const mapDataToRankingArraySkipRankBeforeSameRanks = (arr, id = 'id') => (key = 'score') => {
-  const rankList = arr.reduce((accumlator, item, index, _list) => {
+const mapDataToRankingArrayWithSkip = (arr, id = 'id') => (key = 'score') => {
+  const rankList = arr.reduce((accumulator, item, index, _list) => {
     if ( index > 0 ) {
       const prevValue = _list[index - 1][key];
       // same ranking
       if ( prevValue === item[key] ) {
         const prevID = _list[index - 1][id];
-        const sameRankIndex = getIndexFromRankArray(accumlator)(prevID);
-        accumlator[sameRankIndex].push(item[id]);
-        accumlator.push([]);
-        return accumlator;
+        const sameRankIndex = getIndexFromRankArray(accumulator)(prevID);
+        accumulator[sameRankIndex].push(item[id]);
+        accumulator.push([]);
+        return accumulator;
       }
     }
-    accumlator[accumlator.length] = [item[id]];
-    return accumlator;
+    accumulator[accumulator.length] = [item[id]];
+    return accumulator;
   }, []);
 
+  return rankList;
+
+  /*
   // trim last empty index
   rankList.reverse();
 
@@ -83,6 +90,7 @@ const mapDataToRankingArraySkipRankBeforeSameRanks = (arr, id = 'id') => (key = 
   });
 
   return rankList.slice(i).reverse();
+  */
 };
 
 console.log('SORT DESC');
@@ -99,7 +107,7 @@ console.log( mapDataToRankingArray(idolsOrderByScoreDESC, 'name')('score') );
 
 console.log("\n");
 console.log('> map RankingArray skip same rank');
-console.log( mapDataToRankingArraySkipRankBeforeSameRanks(idolsOrderByScoreDESC, 'name')('score') );
+console.log( mapDataToRankingArrayWithSkip(idolsOrderByScoreDESC, 'name')('score') );
 
 
 console.log("\n");
@@ -124,7 +132,7 @@ console.log('>> Ranking Allow Same Rank');
 const addRankingAllowSameRank = (list, id = 'id') => (sorted, key = 'score') => (allowSkipRank = true) => {
   sorted = sorted || list;
   const rankingList = allowSkipRank
-    ? mapDataToRankingArraySkipRankBeforeSameRanks(sorted, id)(key)
+    ? mapDataToRankingArrayWithSkip(sorted, id)(key)
     : mapDataToRankingArray(sorted, id)(key);
   return list.map((item) => {
     const ranking = getIndexFromRankArray(rankingList)(item[id]) + 1;
@@ -142,3 +150,16 @@ console.log('>> Ranking Allow Same Rank And Skin Rank after same ranks');
 console.log( addRankingAllowSameRank(idols)(idolsOrderByScoreDESC)(true) );
 console.log('---');
 console.log( addRankingAllowSameRank(idolsOrderByScoreDESC)()(true) );
+
+
+const mapRankedArr = mapDataToRankingArray(idolsOrderByScoreDESC, 'name')('score');
+console.log( getIndexFromRankArray(mapRankedArr)('藤堂ユリカ') );
+// => 2
+console.log( getIndexFromRankArray(mapRankedArr)('ジョニー別府') );
+// => -1
+
+const mapRankedArrWithSkip = mapDataToRankingArrayWithSkip(idolsOrderByScoreDESC, 'name')('score');
+console.log( getIndexFromRankArray(mapRankedArrWithSkip)('藤堂ユリカ') );
+// => 2
+console.log( getIndexFromRankArray(mapRankedArrWithSkip)('星宮らいち') );
+// => -1
