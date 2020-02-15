@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>Add Content</title>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="content">
+        <button class="btn btn-danger" id="reset">Reset</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="content">
+        <div id="root1"></div>
+        <div class="text-center">
+          <button class="btn btn-primary" id="innerHTML" data-count="0">innerHTML</button>
+        </div><br/>
+        <pre class="code">update by innerHTML, events are deleted.</pre>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <div class="content">
+        <div id="root2"></div>
+        <div class="text-center">
+          <button class="btn btn-primary" id="insertAdjacentHML" data-count="0">insertAdjacentHML</button>
+        </div><br/>
+        <div class="form-group">
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="position" value="beforebegin" checked="checked"/>beforebegin
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="position" value="afterbegin"/>afterbegin
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="position" value="beforeend"/>beforeend
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="position" value="afterend"/>afterend
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="content">
+        <div id="root3"></div>
+        <div>
+          <button class="btn btn-info" id="addNode" data-count="0">ADD Item</button>
+        </div><br/>
+        <div class="form-group">
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="method" value="appendChild" checked="checked"/>appendChild
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="method" value="insertBefore"/>insertBefore
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="method" value="append"/>append
+          </label>
+          <label class="form-check-inline">
+            <input class="radio form-radio-input" type="radio" name="method" value="prepend"/>prepend
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="template">
+  <p><b>Count: <span class="count">0</span></b></p>
+  <ol class="list">
+    <li>list item
+      <button class="btn btn-sm btn-success">count up</button>
+    </li>
+  </ol>
+</template>
+
+<script src="./add_content2.js"></script>
+</body>
+</html>
