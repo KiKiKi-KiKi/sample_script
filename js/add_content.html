@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>Add Content</title>
+</head>
+<body>
+  <ul>
+    <li>
+      <button id="append">appendChild</button>
+    </li>
+    <li>
+      <button id="innerHTML">innerHTML</button>
+    </li>
+    <li>
+      <button id="insertAdjacentHTML">insertAdjacentHTML</button>
+    </li>
+    <li>
+      <button id="insertAdjacentText">insertAdjacentText</button>
+    </li>
+  </ul>
+
+  <div id="root"></div>
+  <button id="resetBtn">RESET</button>
+
+  <template id="initElement">
+    <b>default content</b>
+    <br>
+    Reset: <span class="count"></span>
+    <ol class="list">
+      <li>first item <button>CLICK ME!</button></li>
+    </ul>
+  </template>
+  <template id="appendItem">
+    <li>list Item</li>
+  </template>
+  <script src="./add_content.js"></script>
+</body>
+</html>
