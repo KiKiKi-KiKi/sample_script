@@ -202,13 +202,13 @@ const Idols = [
 ];
 
 const convertMap = (data) => (key) => {
-  const list = Object.entries(data.reduce((obj, data) => {
+  const list = data.reduce((arr, data) => {
     const id = data[key];
-    return {
-      ...obj,
-      [id]: data,
-    };
-  }, {}));
+    return [
+      ...arr,
+      [id, data],
+    ];
+  }, []);
   console.log(list);
   return new Map(list);
 };
