@@ -20,9 +20,22 @@ console.log(data.map((num) => localeString(num)));
 // => '-1,234,567'
 // => '-1,234,567.891'
 
-// maximumSignificantDigits option を使用することで丸める桁数を指定できる
-console.log(num2.toLocaleString(undefined, { maximumSignificantDigits: 20 }));
-// => '1,234,567,890.1235'
+const localeStringWithOptions = (
+  num: number,
+  options?: Intl.NumberFormatOptions
+) => {
+  return num.toLocaleString(undefined, options);
+};
+
+console.log(
+  data.map((num) => localeStringWithOptions(num, { maximumFractionDigits: 20 }))
+);
+
+// ~~maximumSignificantDigits option を使用することで丸める桁数を指定できる~~
+// maximumSignificantDigits は有効桁数
+// 小数点以下の桁数は maximumFractionDigits を使う
+console.log(num2.toLocaleString(undefined, { maximumSignificantDigits: 6 }));
+// => '1,234,570,000'
 
 console.log('>>> Intl.NumberFormat');
 // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
@@ -52,6 +65,39 @@ console.log(data.map((num) => formatDE(num)));
 // => '1.234.567.890,124'
 // => '-1.234.567',
 // => '-1.234.567,891'
+
+console.log('--------------------------------');
+const numberFormatWithOptions =
+  (options?: Intl.NumberFormatOptions) =>
+  (locales?: string | string[]) =>
+  (n: number): string => {
+    return new Intl.NumberFormat(locales, options).format(n);
+  };
+
+const formatNumberWithDecimalMax = numberFormatWithOptions({
+  maximumFractionDigits: 20,
+});
+
+const formatJP2 = formatNumberWithDecimalMax('ja-JP');
+console.log(data.map((num) => formatJP2(num)));
+// => '1,234,567,890',
+// => '1,234,567,890.1235',
+// => '-1,234,567',
+// => '-1,234,567.89054321'
+
+const formatDE2 = formatNumberWithDecimalMax('de-DE');
+console.log(data.map((num) => formatDE2(num)));
+// => 1.234.567.890',
+// => '1.234.567.890,1235',
+// => '-1.234.567',
+// => '-1.234.567,89054321'
+
+const formatFI = formatNumberWithDecimalMax('fi-FI');
+console.log(data.map((num) => formatFI(num)));
+// => '1 234 567 890',
+// => '1 234 567 890,1235',
+// => '−1 234 567',
+// => '−1 234 567,89054321'
 
 console.log('>>> 正規表現');
 
