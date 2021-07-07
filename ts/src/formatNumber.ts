@@ -99,6 +99,30 @@ console.log(data.map((num) => formatFI(num)));
 // => '−1 234 567',
 // => '−1 234 567,89054321'
 
+console.log('--------------------------------');
+const formatNumberXXX =
+  (options?: Intl.NumberFormatOptions) =>
+  (locals?: string | string[]) =>
+  (num: number | string): string => {
+    const numStrs = String(num).split('.');
+    return [
+      Number(numStrs[0]).toLocaleString(locals, options),
+      numStrs.slice(1).join(''),
+    ]
+      .filter(Boolean)
+      .join('.');
+  };
+
+const formatX = formatNumberXXX({
+  maximumFractionDigits: 20,
+})('ja-JP');
+
+// 数値にすると変数代入の時点で小数点 n位で丸められる
+const num5 = '111111.098765432109876543210987';
+const num6 = '-111111.098765432109876543210987';
+console.log([num5, num6].map((num) => formatJP2(Number(num))));
+console.log([num5, num6].map((num) => formatX(num)));
+
 console.log('>>> 整数部分と小数部分に数値のまま分割する');
 
 const splitIntAndDecimal = (num: number): [number, number] => {
@@ -149,6 +173,33 @@ console.log(data.map((num) => formatRegExp(num)));
 // => '-1,234,567',
 // => '-1,234,567.89054321'
 
+console.log('>>> optional');
+const formatRegExpWithOption = (
+  num: number,
+  options?: FormatOption
+): string => {
+  const numStrs = String(num).split('.');
+  return [
+    numStrs[0].replace(
+      /(\d)(?=(\d\d\d)+(?!\d))/g,
+      `$1${options?.separator || ','}`
+    ),
+    numStrs.slice(1).join(''),
+  ]
+    .filter(Boolean)
+    .join(options?.decimalPoint || '.');
+};
+
+console.log(
+  data.map((num) =>
+    formatRegExpWithOption(num, { separator: '.', decimalPoint: ',' })
+  )
+);
+// => '1.234.567.890',
+// => '1.234.567.890,1235',
+// => '-1.234.567',
+// => '-1.234.567,89054321'
+
 console.log('>>> 再帰関数');
 
 const separate = (numStr: string, separator: string = ','): string => {
@@ -172,6 +223,25 @@ const formatNumber = (num: number): string => {
     .join('.');
 };
 console.log(data.map((num) => formatNumber(num)));
+// => '1 234 567 890',
+// =>  '1 234 567 890.1235',
+// =>  '-1 234 567',
+// =>  '-1 234 567.89054321'
+
+console.log('>>> optional');
+type FormatOption = {
+  separator?: string;
+  decimalPoint?: string;
+};
+
+const formatNumberX = (num: number, options?: FormatOption): string => {
+  const numStrs = String(num).split('.');
+  return [separate(numStrs[0], options?.separator), numStrs.slice(1).join('')]
+    .filter(Boolean)
+    .join(options?.decimalPoint || '.');
+};
+
+console.log(data.map((num) => formatNumberX(num)));
 // => '1 234 567 890',
 // =>  '1 234 567 890.1235',
 // =>  '-1 234 567',
