@@ -99,7 +99,7 @@ console.log(data.map((num) => formatFI(num)));
 // => '−1 234 567',
 // => '−1 234 567,89054321'
 
-console.log('>>> 正規表現');
+console.log('>>> 整数部分と小数部分に数値のまま分割する');
 
 const splitIntAndDecimal = (num: number): [number, number] => {
   const numStr = String(num);
@@ -133,13 +133,15 @@ console.log('>>> split number');
 console.log(data.map((num) => splitIntAndDecimal(num)));
 console.log(data.map((num) => splitIntAndDecimalBySplit(num)));
 
-console.log('>>> split with replace');
+console.log('>>> 正規表現');
 const formatRegExp = (num: number): string => {
   const numStrings = String(num).split('.');
   return [
     numStrings[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,'),
-    ...numStrings.slice(1),
-  ].join('.');
+    numStrings.slice(1).join(''),
+  ]
+    .filter(Boolean)
+    .join('.');
 };
 console.log(data.map((num) => formatRegExp(num)));
 // => '1,234,567,890',
@@ -165,7 +167,9 @@ const separate = (numStr: string, separator: string = ','): string => {
 
 const formatNumber = (num: number): string => {
   const numStr = String(num).split('.');
-  return [separate(numStr[0], ' '), ...numStr.slice(1)].join('.');
+  return [separate(numStr[0], ' '), numStr.slice(1).join('')]
+    .filter(Boolean)
+    .join('.');
 };
 console.log(data.map((num) => formatNumber(num)));
 // => '1 234 567 890',
